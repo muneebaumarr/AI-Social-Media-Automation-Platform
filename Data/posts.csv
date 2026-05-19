@@ -1,0 +1,21 @@
+post_id,user_id,title,content,ai_caption,status,created_at
+1,3,AI Tools for Students,A short post about how students can use AI tools for learning.,"Use AI tools wisely to learn faster, not to skip learning.",draft,5/6/2026 12:00
+2,4,Social Media Consistency,A post about the importance of posting consistently on social media.,Consistency builds trust before growth starts.,pending,5/6/2026 15:00
+3,5,Python Learning Journey,A post about learning Python through small projects.,Small Python projects teach more than only watching tutorials.,approved,5/6/2026 18:00
+4,6,Database Design Tips,A post explaining why clean database design matters.,A strong database is the backbone of every working software system.,rejected,5/6/2026 21:00
+5,9,Automation Benefits,A post about how automation saves time in daily work.,Automate repeated tasks so you can focus on creative work.,scheduled,5/7/2026 0:00
+6,10,LinkedIn Growth,A post sharing simple ways to grow on LinkedIn.,"Share what you are learning, not only what you have achieved.",draft,5/7/2026 3:00
+7,3,AI Caption Writing,A post about using AI to generate better captions.,"AI can help draft captions, but human review makes them real.",pending,5/7/2026 6:00
+8,4,Team Collaboration,A post about collaboration in software projects.,Good teamwork starts with clear roles and communication.,approved,5/7/2026 9:00
+9,5,Content Approval Flow,A post explaining why approval workflow is important.,Approval workflows reduce mistakes before content goes public.,rejected,5/7/2026 12:00
+10,6,Analytics Tracking,"A post about tracking likes, views, comments, and shares.",Analytics show what your audience actually cares about.,scheduled,5/7/2026 15:00
+11,9,Beginner Freelancing,A post for beginners starting freelancing.,"Start small, build proof, then apply with confidence.",draft,5/7/2026 18:00
+12,10,AI Agents,A post explaining AI agents in simple words.,AI agents are tools that can plan and complete tasks step by step.,pending,5/7/2026 21:00
+13,3,Prompt Engineering,A post about writing better prompts.,A clear prompt gives AI a clear direction.,approved,5/8/2026 0:00
+14,4,Student Productivity,A post about using technology to manage study tasks.,Productivity is not doing more; it is doing the right things.,rejected,5/8/2026 3:00
+15,5,SaaS Project Idea,A post about turning small tools into SaaS projects.,A useful SaaS solves one clear problem for one clear audience.,scheduled,5/8/2026 6:00
+16,6,Content Scheduling,A post about scheduling posts in advance.,Scheduling helps creators stay consistent even on busy days.,draft,5/8/2026 9:00
+17,9,Digital Workflow,A post about converting manual work into digital workflow.,"A digital workflow makes work traceable, faster, and easier to manage.",pending,5/8/2026 12:00
+18,10,AI in Marketing,A post about using AI in marketing tasks.,"AI helps marketers brainstorm, write, and analyze faster.",approved,5/8/2026 15:00
+19,3,Learning in Public,A post about sharing learning progress online.,Learning in public builds confidence and opportunities.,rejected,5/8/2026 18:00
+20,4,Final Project Progress,A post about building a database lab project.,A good project is not only an idea; it is a working system.,scheduled,5/8/2026 21:00

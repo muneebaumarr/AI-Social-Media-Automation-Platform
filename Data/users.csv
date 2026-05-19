@@ -1,0 +1,11 @@
+user_id,full_name,email,password,role,created_at
+1,Muneeba,muneeba@example.com,hashed_pass_001,admin,5/1/2026 9:00
+2,AI Hassan,ali.hassan@example.com,hashed_pass_002,admin,5/1/2026 9:20
+3,Ayesha Khan,ayesha.khan@example.com,hashed_pass_003,content_creator,5/2/2026 10:10
+4,Hamza Ahmed,hamza.ahmed@example.com,hashed_pass_004,content_creator,5/2/2026 11:30
+5,Fatima Noor,fatima.noor@example.com,hashed_pass_005,content_creator,5/3/2026 12:15
+6,Usman Tariq,usman.tariq@example.com,hashed_pass_006,content_creator,5/3/2026 13:45
+7,Sara Malik,sara.malik@example.com,hashed_pass_007,manager,5/4/2026 9:30
+8,Bilal Shah,bilal.shah@example.com,hashed_pass_008,manager,5/4/2026 10:00
+9,Zainab Raza,zainab.raza@example.com,hashed_pass_009,content_creator,5/5/2026 14:20
+10,Omar Farooq,omar.farooq@example.com,hashed_pass_010,content_creator,5/5/2026 15:00
