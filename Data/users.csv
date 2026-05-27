@@ -1,0 +1,61 @@
+user_id,full_name,email,password_hash,role,created_at
+efe9443c-5c65-4aa8-a153-058e73ee8785,Allison Hill,donaldgarcia@example.net,b23f41afa5f47b191d275cc24f063272e9a95f5b36225f9c2de2821b6b274b8c,writer,2025-12-15 06:54:54
+b726d95d-3e30-450e-85b8-483fd961fb21,Javier Johnson,jesseguzman@example.net,20d2dd0a416d9563f2dabe9a4c293593a5390c30b3945c06ba6d20fe7a25b3a7,manager,2025-05-01 22:54:02
+7709fcaa-e978-4190-ad91-87718c970aaa,Kimberly Robinson,lisa02@example.net,726d638f73d468a670ce09abba321e79a34aa3795ff2710d0436ecc2000085cc,admin,2025-08-02 11:03:56
+ceb0e311-1940-4edb-9345-d351dc01fa46,Daniel Gallagher,daviscolin@example.com,33e3f996588677ce376555d9705c6a4e0783924ef7b0f92b335fa735c429b4a7,client,2025-07-14 06:54:59
+51b16d87-fbd8-4a1a-abf1-4a830feeaac3,Monica Herrera,smiller@example.net,1fe2de3ac63cab6d1e6d3392b40fea0e1c8fd3ee1dcc23403d6941a8c72dfe25,writer,2026-01-20 04:40:10
+1ba49f35-6dbf-43b0-bf29-43c87362ee82,Laura Bush,stanleykendra@example.org,6d2644d00e1df19eaa14120b9638161aa91740a18ba3462c9e27c00b4a7a609b,manager,2025-12-29 01:53:48
+0c79f3ad-d237-44b6-92cd-d308bdc56731,Jamie Chavez,francisco53@example.net,38defdcc38857df8118075402e7af822b0a9dfe188bc97f0a2b016b99b20f2aa,admin,2026-03-18 19:21:35
+803dc40b-3794-49f7-9a03-5535287ba70e,Maria Lynch,amandasanchez@example.com,4cbc791290affec0a98c477172f35395c5af7640abdffc8a0d8cd9627810b73d,client,2025-05-24 20:49:19
+49245511-d102-4326-bb10-ec515e2d2229,Margaret Hawkins DDS,perezantonio@example.com,10ec5a14455d0439147c431f997ad7a4c58d5d7be4e55e994d7d0cc3343c302a,writer,2025-09-25 19:28:15
+243f5258-7384-4c21-afce-cbe3ca1e1d4d,Thomas Bradley,jason76@example.net,abb346954e29a8141c8cb94eddfb8190b61b3051dfa0b4ec95d5e29d93e182d8,manager,2025-05-03 17:24:16
+cddc6141-ced4-49f2-9643-1cd932430d33,David Hoffman,julie69@example.com,d7dab5e54f99a4788e47e6c7921417c6b8ab37d0f4b40772dfd80d8c30d2b12e,admin,2025-07-12 14:18:37
+ba417948-8835-4463-8aa8-6f94a4d9606e,Brenda Snyder PhD,hernandezernest@example.net,2ad65417b39b8b803218700a5393303946d02d0e26267e06667390f0f2f8c5b1,client,2025-10-26 16:21:36
+a64b9a35-9042-4900-b2fa-5df61d6ac10b,James Ferrell,tasha01@example.net,22452705de20f2fabd5a6ca0c1b891050ea8cd90f0513c020a63e1d76ccde098,writer,2025-05-02 12:26:40
+2a60c205-775f-4563-a0bd-f42ad5cda88b,Patricia Peterson,ryan70@example.net,3ba35621a8b4afa459ab7703717f87ac6aeb485d2bf446f0edf6ff01a8189425,manager,2025-07-05 06:29:00
+22a22bf7-a265-4c67-92fd-e4d53fd5d936,Jonathan White,harrellkenneth@example.net,129adba1ba029e5a4c8547c1cbfe9b84ddcccb790751eeeef1c5fe77d06badca,admin,2025-12-19 03:46:44
+6487985a-ebd8-4020-b43b-fb0c49e29bd1,James Martin,georgetracy@example.org,c509823c0820d9d7ea38abcff816c8fb5eebca42f04a3833721db9af6927f77e,client,2025-11-10 07:53:08
+3b8472d5-9aa6-4934-b2c4-4bbfb3edd4f6,Sandra Parker,allenashley@example.org,0dd2b3752d462dc54fd19c5d455f191db04c757a7abf0401213f49600ec0a8d1,writer,2025-07-13 06:19:04
+44c59837-bbaf-429a-b3c0-eae434bef011,Mr. Philip Cannon,donnaarroyo@example.org,ac9f83e6d15e99b09d95dbbafcb68ba95add0998325cd888934fc93a6bff8fd1,manager,2025-11-26 17:29:04
+e2792a3a-4c3e-4f9e-ba05-e6be21daf007,Jenny Lewis,jenniferross@example.net,e9d0d52dbdf1f01c3a7107e5ab57b442c7a8942518b5bbcf58123ab88dd74492,admin,2026-02-16 04:32:51
+c6f4d035-66fb-45f9-9858-6465fe024151,Joseph Martinez,calebsmith@example.net,8e5dbcb6fcb80c2af5d66844e578c1c9845179a8bc7e58690bf0933a58bfe101,client,2025-04-25 02:30:51
+92f053d3-8e56-4e79-b440-e321a27445e6,Benjamin Welch,carlosjohnson@example.com,3436965836d671702082f5d5b210d3c0613393dd22099438136f964356534c05,writer,2026-02-14 20:28:48
+329386b5-1188-4f07-8f8e-83e72c1d8d43,Michael Lewis,jenniferkhan@example.net,687825c563d5cfccfc88ed8eb70909dc97e0044e69f5783e65ceb67bce0e2c25,manager,2026-01-06 00:16:59
+495888d6-7fff-44f4-a297-50e23921609f,Rhonda Lee,hopkinsmichael@example.com,3dfeb40681d98729ab3ed87d98a960b9540c6af9ef0319536d8cb647112e610d,admin,2025-08-26 14:13:47
+2bb247ed-81e7-4716-8d5f-7a3c2132a1ea,Megan Joyce,brownjessica@example.org,4df9b6266933c21e25141c62a83d54bc34c4aea60605d049b35b5fce0a94b9f2,client,2025-06-19 05:27:47
+07f8f36c-dbf5-4011-96d8-bbef51f3a943,Jerry Henderson,steven17@example.net,fd2dd57fc13de88607fd0c2173856eb61947cfec1eb14195b8f53de07047513c,writer,2026-04-11 20:51:26
+bd87888d-c59e-4e60-887a-c01bacfae572,Kimberly Smith,housemelinda@example.org,830c6b6de93c1482a3119348da32682800b0a228bf6b942e642b2934093979bf,manager,2025-08-25 05:45:53
+83570876-9cac-4946-996e-db4fc5026329,Dr. Steven Martin,gallowayjoseph@example.com,7b308ffa1ed446a0ed87fe1a06770e0a1c8231fca309d82603740e5e551c63a1,admin,2025-05-27 00:23:18
+9c39df6b-32e7-4786-b605-9f1a387b49bb,Monica Logan,smoore@example.org,e54dece40379a5be1596ee27755d8b97f6c654e3b580ada6a9fe814613cd3888,client,2025-05-28 11:38:48
+aac33f61-cc4c-4b02-85a2-07eaf728f265,Kimberly Adkins,williamsthomas@example.net,71e19b46582aeff6a8dea3193f0fda4c833f15e5d2d1c499a76a09869dbb8bc4,writer,2026-03-02 06:33:18
+5077012c-9ded-4fc4-bb23-3ab5ecf57245,Angela Lopez,leonardjoe@example.org,a9bdfb689a8c930aa6918293f34a88393518e40fb3c582e1d2eb4ca367313781,manager,2025-12-02 01:53:32
+821a7c0b-bf7e-415d-96d8-98899be4dc01,Lauren Williams,barnesbrandy@example.net,6e154cb4cbfa2f495c4cf9fb49ac7200ed815202db5f28c8a13f33d5c3a41ffb,admin,2026-02-15 08:06:15
+a4a4d4ec-a6c2-41d5-af99-685d6202c2e0,Michael Edwards,randy47@example.com,954051377de172972eee0825eadfddf3754c0f6ad1320fc30a51f77d9016a2e9,client,2026-01-17 16:49:24
+687378c7-ffc5-46de-8ce8-6bfea52e7cb1,Alexandra Howell,jonesjason@example.com,2f20d6265cfd212b8b69eba30619f3efe1eb4504cfafb15654e80f37eedddfed,writer,2025-11-07 02:30:38
+cf908504-955b-406c-a11f-381acbcdbb83,Benjamin Sanchez,eric84@example.net,d3f0c5424b3048f9b551efc0ece4d13128b973d9b53eb599e915e35843261ca8,manager,2026-04-17 18:04:23
+974a7fa3-5874-428f-b052-19c449db2ec1,Kendra Contreras,sarah12@example.com,45a4c873d7155973c0d059071523fc0e9060e0e3a463391f43d4187a826d251a,admin,2025-09-09 18:11:25
+2d394d19-7eb2-4cab-87dd-1659cc1e643a,Juan Nelson,jenniferharris@example.net,ded65ae5cb89671fff3f7cc92b75c3f6a89936876634097cca6b264c3a274f1a,client,2025-11-12 22:55:33
+4cb29695-59dc-4d1a-90d2-dcea9bb09e34,Danielle Odonnell,davisrodney@example.com,5941a74f3096328368f9fb45e014298c1d8858b034b2488831d5a3a08057b149,writer,2026-02-23 13:55:07
+36bb76af-b98b-42ea-a7cd-e5eb0ec10d3f,Carlos Whitney,joycearnold@example.com,68f1bcff26d1248024fef29516ad1dbbabd4972e30d97cd9903b36377551037f,manager,2025-12-07 13:15:38
+5ef30340-af76-4338-924f-0da30baeabab,Tony Vazquez,amydavenport@example.net,fc6e8ad7547e1cc68b5998d9fc3dc2d140fd8ebde2a86166195fe3dc601cad9b,admin,2026-03-07 12:45:45
+2fd651e8-1167-4aec-8d82-825058bf4fa6,Andrew Diaz,nolanjason@example.org,19af4a21c30b3f36e938e14caba2620484962c9077a86b88b19a9a04630a36e4,client,2025-11-22 07:41:32
+58b00339-86d9-43e5-a4a7-9f6eb3713206,Justin Baxter,sarayoung@example.org,e84303888d739510bf26246c32123cbb12854ef01511d54360615518a1526720,writer,2026-01-08 09:24:11
+6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,Sierra Johnson,kimberly63@example.com,c399b75df9b050d9abe323fd23b976c8951fb5e9d682e021b6e90a37f3c16cef,manager,2025-05-09 15:43:32
+6fc71363-e48e-4bef-8256-6df2fbf593ad,Janet Williams,dwalker@example.com,7f60cf721e511eef5351c189352e0ee5be7f6a533bb83a2ab79ab6e609167674,admin,2025-07-16 00:32:31
+f6ad0522-b115-40d7-a5cf-ecbb509defdb,Crystal Johnson,raymondramirez@example.org,0125cfbf6c1d4be9a307033f5a83cce5319320dc84f3ecc16f627fbdff64a2ee,client,2025-08-07 18:34:13
+d7b13d37-760a-48aa-9193-5570604d6980,Martin Ross,sheila14@example.org,8a356973a80f1c81187e42a1fe8c09c0f79d4ab26b2234f9ac866257d98166e3,writer,2025-05-22 05:21:28
+41108c3b-b486-4918-80f7-a4d5e6a03e72,Mrs. Linda Reed,samuel81@example.com,0a5e70d68846f4c72a7eeb510fb3b81d83d136919421988cb7229be4181369cd,manager,2025-07-17 19:59:18
+26a498be-18db-4503-b779-1aa3754d397a,Andrew Graham,michaeljones@example.net,248ada0424afd98c52724273b8f73a7a04a9ad472bea9bb70bbac5c481ca20f9,admin,2025-05-30 01:41:52
+fafc2d8e-47ad-434e-85de-09673e9ded8b,Mary Martinez,william65@example.com,2150bd90012ab6ccd60a97ce36ccb1ac277c296d0ee157d99f8ec5acf1c2db95,client,2025-08-03 13:12:39
+1017f65f-d9f5-408c-82ca-85a9e07f2fad,Cheryl Ortega,lbyrd@example.net,c9b7a532c458bef91431190fc120378eb44c42dcb4b784d7cdfdd8aa521ed312,writer,2025-12-13 21:40:59
+55710fd8-b5eb-45d5-b85c-dba07a72913c,Roy Torres,russellcarpenter@example.net,49f4a09a8de0fd4a47932b5b035c1b3ef2ce46ec3c5eef533e27cb59ba0ca63e,manager,2025-09-04 16:30:54
+6c066896-edd8-432e-9ad7-9167cd79ba74,Michael Dixon,donnacampbell@example.net,65a31258120287f1c42a7d3537c5429b753f439e7bd73d8c4b70e7fbec33af1d,admin,2025-09-06 16:00:44
+e04d32bb-4691-4426-996e-0d6f7538cdd1,Robert Potter,jeffrey32@example.org,16c3358d4a84000c02eb7162eedb611082ca581d06aa240a0c219cdba1dbe2a1,client,2025-07-09 05:13:39
+65e1c247-ba54-4b92-b197-89dd82dec370,Miss Patricia Gibson,jennifercruz@example.com,dc1bb474626dff322d94cafd14825be917d2501d21e409e7f843775bf0189851,writer,2025-07-30 11:34:05
+8dfa738a-8a11-4004-9ea5-063ed650143b,Abigail Potter,osbornejeffery@example.net,29f277b93be2f63d1cd95f8c843090fdab1307362d37e53f6264acbe1d4bd7be,manager,2026-04-04 06:17:52
+112250fc-f2c9-45d8-9327-ef6b4f48f76e,David Charles,danderson@example.net,b9f606a508bb09c73a86258c3b7662a4d1a3c3df90efc72e93ecfc1b696a5dd4,admin,2025-12-18 11:21:34
+8caa078e-4345-450f-bc9c-d78d65803aec,Emily Fischer,usalazar@example.net,30a638f262caff7a2af2338686c5781b800569329042ba982d1006e847eb26c8,client,2025-12-04 01:53:18
+2a9fdd9c-daef-4bb0-8cfa-f3674b4358fd,Jill Moore,wcole@example.org,50865c15a39dcf68c619a3cd459f438d2669883b79691a62f5824aaf570b2012,writer,2025-06-25 00:30:59
+02acf66a-1031-4d9e-811b-9a2d712d6f8d,Richard Washington,joshuajones@example.com,a40cf42c158e929c92ab97d45f2296bf6e6b5adbd3621b3771fb35ffe583855a,manager,2026-01-17 11:27:04
+fd957905-59c8-4cf7-97e1-2779cba7c497,Steven Miller,jessebenson@example.net,9b69321495dd2619fe0aa895f5674210bf5496c16a15fb2cebba422ed9a0665f,admin,2025-06-22 03:49:09
+c2be8a9c-40f8-4045-8c0d-b9d10bc48108,Gary Owens,clarkrobert@example.net,0314f6f342f876e24d2a3a43c4ca2e5318b22a72ff9d3ad466fd97a55c7586ac,client,2025-09-10 02:22:10

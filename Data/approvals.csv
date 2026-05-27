@@ -1,0 +1,71 @@
+approval_id,post_id,manager_id,approval_status,remarks,approval_date
+557a676c-4358-4638-bd4d-a3fcef9dbc99,84ca91a5-cf36-47a1-b97d-7797d77569a3,2a60c205-775f-4563-a0bd-f42ad5cda88b,approved,"Looks great, approved.",2026-03-27 04:44:58
+ee0f20e3-e131-4d1b-954a-43f15249eff1,fc3677fa-467f-4522-83ef-c14b955a1be6,36bb76af-b98b-42ea-a7cd-e5eb0ec10d3f,rejected,Off-brand tone. Please revise.,2026-02-03 03:58:28
+54659926-bf4d-4537-93ee-2d7bd2f38c75,b0563c12-9c37-4b05-bc0e-9876ab2bfac5,bd87888d-c59e-4e60-887a-c01bacfae572,approved,Well done. Go ahead.,2026-04-20 02:29:18
+dd706302-a714-4808-9e1a-c989987490b8,c412af8b-1ecf-43bf-be55-4e3a9cd0d184,243f5258-7384-4c21-afce-cbe3ca1e1d4d,approved,Content is on-brand. Approved.,2026-02-01 14:10:00
+a88ef55b-686c-4c01-ac4f-b6aec88d6d18,7e5f3eed-0b5a-46a7-862a-84ed6868a0dc,329386b5-1188-4f07-8f8e-83e72c1d8d43,approved,Content is on-brand. Approved.,2026-02-01 23:58:26
+189bacca-39db-43d1-8bcd-5055ea7f80e8,860cdc76-4102-463a-b360-838f1ade282f,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,approved,Perfect timing. Scheduled.,2026-02-11 11:23:48
+48fa7c9c-c936-45e9-9dd8-3e350ed91d8e,c412af8b-1ecf-43bf-be55-4e3a9cd0d184,cf908504-955b-406c-a11f-381acbcdbb83,request_edit,Add a CTA at the end.,2026-03-31 23:21:24
+4970a510-03f5-481d-a407-b97016c021e6,b22ee32d-06cf-459d-8d47-3b0b76ae096f,cf908504-955b-406c-a11f-381acbcdbb83,approved,Content is on-brand. Approved.,2026-05-17 23:55:05
+4df428cf-fc45-4612-9303-88ebb3f69d9e,01fecc99-541f-4fad-ac4a-c1a3593864ab,bd87888d-c59e-4e60-887a-c01bacfae572,rejected,Caption is too long for this platform.,2026-04-11 10:48:14
+28e522e3-f7d7-4ad0-8734-3b9c31c437a6,3022ee85-2e0d-4bfb-bd49-12d477834abb,243f5258-7384-4c21-afce-cbe3ca1e1d4d,approved,Well done. Go ahead.,2026-04-20 02:35:50
+70541b49-f7b9-4d7e-97d3-6744226ddd20,787ad778-27ed-4173-bc31-fad3a2c19270,2a60c205-775f-4563-a0bd-f42ad5cda88b,request_edit,Change the hashtags to be more specific.,2026-05-05 11:22:21
+4bd64c4f-402b-44d9-a009-0fba28811ea8,860cdc76-4102-463a-b360-838f1ade282f,55710fd8-b5eb-45d5-b85c-dba07a72913c,approved,"Looks great, approved.",2026-03-22 11:53:50
+18e0daa3-76bc-469c-bb77-1dc9ecc5aa37,4ec58025-5ae4-4c13-894f-12116b948f88,cf908504-955b-406c-a11f-381acbcdbb83,approved,Perfect timing. Scheduled.,2026-02-02 21:16:02
+16cc54ba-3dce-4dae-bafc-61cc6562ed10,f3994854-e4d7-4ff0-81d6-2e02bb7f512a,329386b5-1188-4f07-8f8e-83e72c1d8d43,rejected,Hashtags are irrelevant.,2026-05-03 22:09:15
+a2e4eee1-0ea1-4fa8-a224-0da1c0018cea,398267a5-74c2-46ae-850e-231ea4336734,cf908504-955b-406c-a11f-381acbcdbb83,rejected,Too promotional. Rewrite.,2026-01-05 09:06:00
+4079e78b-625b-4ff1-b9e4-b6206ba98569,db935249-c441-4618-a1b7-92be0a7a363e,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,rejected,Off-brand tone. Please revise.,2026-05-07 20:52:19
+34fc9c78-c276-437d-bb6b-d73a6bd48eb0,942ef305-f056-441c-9ac6-7d00c0000d0e,55710fd8-b5eb-45d5-b85c-dba07a72913c,rejected,Too promotional. Rewrite.,2026-03-10 03:07:08
+0ac2fa68-b35a-4ec9-8846-9f6331297a9d,4844bcda-cb6b-48e7-995a-0445a611c07b,44c59837-bbaf-429a-b3c0-eae434bef011,request_edit,Please shorten the caption.,2026-01-29 06:13:47
+98a916fa-732a-4699-914a-4ff31c924074,942ef305-f056-441c-9ac6-7d00c0000d0e,41108c3b-b486-4918-80f7-a4d5e6a03e72,approved,Perfect timing. Scheduled.,2026-05-13 22:50:50
+fff29dfa-4174-4d0b-a2aa-b30de15b9590,55c4016f-700f-4928-8ffa-9e8575a1b2ef,41108c3b-b486-4918-80f7-a4d5e6a03e72,approved,Well done. Go ahead.,2026-03-20 23:02:27
+325d1981-a8a5-4593-afa3-3f18748417d5,4e129d03-5818-458b-8cae-33093a13d6c4,bd87888d-c59e-4e60-887a-c01bacfae572,approved,Content is on-brand. Approved.,2026-02-12 15:43:24
+c6fa341e-f2f6-4319-a03b-4c39e7ecd7a2,abcdc0b6-0457-423d-a513-efb6bd0cc404,cf908504-955b-406c-a11f-381acbcdbb83,request_edit,Tone needs to be more professional.,2026-01-12 09:25:41
+6ddd83be-4801-43b9-814e-f6b7904ade25,787ad778-27ed-4173-bc31-fad3a2c19270,55710fd8-b5eb-45d5-b85c-dba07a72913c,request_edit,Add a CTA at the end.,2026-02-21 22:26:45
+9f879d02-6e9e-4274-a634-0ca8b28d4340,3022ee85-2e0d-4bfb-bd49-12d477834abb,b726d95d-3e30-450e-85b8-483fd961fb21,approved,Well done. Go ahead.,2026-04-18 03:31:25
+f0f1bd1f-be4c-45ee-bdad-d977cfed7fcd,84ca91a5-cf36-47a1-b97d-7797d77569a3,44c59837-bbaf-429a-b3c0-eae434bef011,approved,Perfect timing. Scheduled.,2026-02-10 16:24:46
+305b672f-dbdf-48a0-8014-f733684da5c2,fa950e4d-0321-4563-91b0-978ecd79d345,329386b5-1188-4f07-8f8e-83e72c1d8d43,approved,Well done. Go ahead.,2026-03-13 02:18:26
+b6586fdf-6a98-49d1-bc4f-320b2716696e,41ba58d3-e698-415d-87e7-98c24451c432,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,approved,Perfect timing. Scheduled.,2026-05-21 17:02:19
+d5a3e4f4-7e5b-4854-a7b2-9fd467ccd458,8eb3e381-22fb-4087-a502-5615b91a04f8,41108c3b-b486-4918-80f7-a4d5e6a03e72,approved,Well done. Go ahead.,2026-04-16 21:11:55
+a7de9bbc-4966-4636-aa37-4cbd30f4ddcc,258a3a87-7cd1-4cbd-8620-5234d29e7694,243f5258-7384-4c21-afce-cbe3ca1e1d4d,approved,Perfect timing. Scheduled.,2026-01-25 02:57:36
+fdb7d32f-abbe-482a-b18b-b0341922115f,6531b2aa-e763-4e93-bad0-589f6a2a8dc9,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,request_edit,Please shorten the caption.,2026-05-02 17:18:51
+10c6d46d-6359-4bc6-a066-b7a632b4841f,702d8c8e-9ea4-4350-baca-d0b1a26d7765,8dfa738a-8a11-4004-9ea5-063ed650143b,rejected,Off-brand tone. Please revise.,2026-02-28 03:31:11
+17c1824b-4a93-4f5a-b2dd-c58a00e81660,40157e74-5f3e-48e9-a8b2-fcaba53d2449,2a60c205-775f-4563-a0bd-f42ad5cda88b,approved,Well done. Go ahead.,2025-12-30 01:29:42
+32acf468-9753-44da-ab10-55934dd23d68,3b87b33b-92b5-42f1-9325-a4844aa5839c,5077012c-9ded-4fc4-bb23-3ab5ecf57245,approved,Perfect timing. Scheduled.,2026-04-05 22:24:21
+9bbd2110-6871-4f7f-beb4-89e4021e80da,84ca91a5-cf36-47a1-b97d-7797d77569a3,b726d95d-3e30-450e-85b8-483fd961fb21,approved,Perfect timing. Scheduled.,2025-12-30 11:11:03
+b333d1a0-6ae6-40ed-8aba-ad12ba9654f5,9d51a061-b847-4cfd-bb57-4925965df151,41108c3b-b486-4918-80f7-a4d5e6a03e72,approved,Content is on-brand. Approved.,2025-12-31 06:06:25
+b31e1481-dcac-41bc-bfa2-3ce044a63cce,4f61ff60-b38d-4339-93a0-03ba7a092acb,bd87888d-c59e-4e60-887a-c01bacfae572,request_edit,Add a CTA at the end.,2026-01-13 15:29:45
+53e81ed8-c54a-4fec-88b5-fe660919cb90,9a6ef427-3c83-47e9-bff5-255d467b0b44,cf908504-955b-406c-a11f-381acbcdbb83,approved,Well done. Go ahead.,2026-03-31 01:08:29
+e7583336-8374-41b3-acfa-dfb4ee2ba63b,d2b8df6d-c3f8-447c-84ce-16a1311668a7,8dfa738a-8a11-4004-9ea5-063ed650143b,approved,Perfect timing. Scheduled.,2026-01-09 11:22:41
+ade946c8-0ce7-446d-82c8-932b1f0d6025,eada5555-8b99-4e3f-be40-cc3c7f38969d,5077012c-9ded-4fc4-bb23-3ab5ecf57245,approved,Well done. Go ahead.,2026-02-11 09:30:52
+b40bb5db-8e67-4be2-9477-6b7b616e624a,bccaed2c-c0e6-417d-bb18-6f33c489ae1f,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,request_edit,Please shorten the caption.,2026-01-11 15:09:47
+b77d86f2-d850-487f-adab-745f2edb55f9,db935249-c441-4618-a1b7-92be0a7a363e,bd87888d-c59e-4e60-887a-c01bacfae572,approved,"Looks great, approved.",2026-04-02 13:48:59
+7bbcd304-67a6-494a-8ba2-6ddd9d2ac41e,538fbe10-decd-4587-a186-a0a42ed5c345,1ba49f35-6dbf-43b0-bf29-43c87362ee82,approved,Perfect timing. Scheduled.,2026-04-03 18:59:36
+ce0f1d48-2ed1-4655-a3eb-291dfba868a1,4844bcda-cb6b-48e7-995a-0445a611c07b,36bb76af-b98b-42ea-a7cd-e5eb0ec10d3f,request_edit,Please shorten the caption.,2026-05-11 00:34:43
+56a252b4-7de3-493a-ac5c-c3771912fdfa,b0563c12-9c37-4b05-bc0e-9876ab2bfac5,2a60c205-775f-4563-a0bd-f42ad5cda88b,approved,Perfect timing. Scheduled.,2026-02-07 02:14:28
+95c4a54a-8717-4b52-bdc8-e16e98ceae5c,702d8c8e-9ea4-4350-baca-d0b1a26d7765,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,request_edit,Please shorten the caption.,2026-01-24 10:10:37
+f494f90b-94f1-43fc-9545-e7864e0af66c,0b4e84dd-1d40-4495-abb6-ff313d14b1d1,b726d95d-3e30-450e-85b8-483fd961fb21,request_edit,Add a CTA at the end.,2026-04-19 18:52:02
+3e3cab1a-2739-4f66-bf4c-bf2f79b53ecd,dfbeda84-fbdf-419d-9f45-28810155dc1d,02acf66a-1031-4d9e-811b-9a2d712d6f8d,approved,Well done. Go ahead.,2026-03-22 17:31:11
+28d3ab11-49ba-4d57-8ed2-cf68fc096159,6052327c-a37d-464a-b0ab-6f682fc7bd9c,8dfa738a-8a11-4004-9ea5-063ed650143b,request_edit,Change the hashtags to be more specific.,2026-02-23 21:26:21
+44130edd-4a63-4db0-8106-d6577c149347,90fdc664-03a0-4e49-b9f4-591896ebad6a,55710fd8-b5eb-45d5-b85c-dba07a72913c,request_edit,Please shorten the caption.,2026-03-13 07:38:25
+aff64ac1-5401-42ee-81d3-9c4ebb4094c4,0ebb25c7-4e2e-4e43-8a09-9c60b7f19083,b726d95d-3e30-450e-85b8-483fd961fb21,approved,Well done. Go ahead.,2026-05-02 15:54:21
+e74c92be-5464-42ca-acb2-a6157e9f8ed7,06b4e9b5-dc48-46ac-afa1-1e05851a038f,36bb76af-b98b-42ea-a7cd-e5eb0ec10d3f,rejected,Hashtags are irrelevant.,2026-05-22 01:39:54
+0d4eb502-7d79-416a-a6ce-349c5f814db0,7e30b8bf-dcd2-46ab-922a-d7f7dec4e8e3,b726d95d-3e30-450e-85b8-483fd961fb21,rejected,Hashtags are irrelevant.,2026-03-11 19:12:11
+56146769-9923-4900-87c9-1e51e320db65,258a3a87-7cd1-4cbd-8620-5234d29e7694,cf908504-955b-406c-a11f-381acbcdbb83,request_edit,Tone needs to be more professional.,2026-01-25 09:00:13
+67aa43bb-7ed9-456f-b0d6-ebec3258c78a,f38adbe6-a606-40e3-a6ed-1bacf2e0d86a,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,approved,Content is on-brand. Approved.,2026-04-26 14:39:02
+97cd0236-76a2-42f4-a1af-578ffd0d5dd0,702d8c8e-9ea4-4350-baca-d0b1a26d7765,1ba49f35-6dbf-43b0-bf29-43c87362ee82,approved,Perfect timing. Scheduled.,2026-04-13 17:45:46
+a27b6afe-67c0-4fc7-aec2-665515275b8c,788d14f2-ff4c-47bd-9a98-f606b40a2080,243f5258-7384-4c21-afce-cbe3ca1e1d4d,rejected,Caption is too long for this platform.,2026-02-20 10:40:09
+db8edac3-d1a2-4416-87c9-a84c6db6b2b6,398267a5-74c2-46ae-850e-231ea4336734,b726d95d-3e30-450e-85b8-483fd961fb21,request_edit,Tone needs to be more professional.,2026-02-20 07:52:12
+2e4f2a73-2218-45fe-b8b4-766c538a0e0a,35a37842-1cf2-4b4c-a8b7-47896e79c903,1ba49f35-6dbf-43b0-bf29-43c87362ee82,approved,Well done. Go ahead.,2026-03-02 21:59:16
+bd168c00-d5af-4a63-83d7-cd75158a929e,1b61dd04-3018-47ae-8a5b-5987d957255f,cf908504-955b-406c-a11f-381acbcdbb83,approved,"Looks great, approved.",2026-01-01 14:43:04
+8b79433d-3595-474a-bb05-8061fe1ce9ef,258a3a87-7cd1-4cbd-8620-5234d29e7694,cf908504-955b-406c-a11f-381acbcdbb83,approved,Content is on-brand. Approved.,2026-05-06 09:27:41
+9bb6206e-ca71-4fe6-b1ae-b346787a6d5a,4f3eb56d-4ac5-4e7c-a1f4-6605681262f2,44c59837-bbaf-429a-b3c0-eae434bef011,approved,"Looks great, approved.",2026-04-15 16:50:48
+60f01c37-d42a-4b8d-9363-d998ed15733a,1b61dd04-3018-47ae-8a5b-5987d957255f,02acf66a-1031-4d9e-811b-9a2d712d6f8d,request_edit,Add a CTA at the end.,2026-03-23 22:08:08
+1ab170c5-0713-4b19-90ee-f6f084bf87d0,538fbe10-decd-4587-a186-a0a42ed5c345,6ac0a79b-5eb4-48d3-bcac-a0406d112aa3,approved,Well done. Go ahead.,2026-02-06 18:27:34
+97af3558-810c-47a8-841e-dea90c9558c8,35a37842-1cf2-4b4c-a8b7-47896e79c903,5077012c-9ded-4fc4-bb23-3ab5ecf57245,approved,Well done. Go ahead.,2026-03-03 11:12:27
+e48d9896-6ecf-4ee9-949b-16b56991d7a7,4ec58025-5ae4-4c13-894f-12116b948f88,44c59837-bbaf-429a-b3c0-eae434bef011,approved,"Looks great, approved.",2026-02-20 12:11:16
+a7dc4330-a5fe-4260-af0e-e6a48d29f69b,468b8280-beb1-4ea2-84d0-716e92936635,41108c3b-b486-4918-80f7-a4d5e6a03e72,rejected,Too promotional. Rewrite.,2026-03-06 22:07:06
+b1702e0e-860d-4926-b513-affd979677f4,90fdc664-03a0-4e49-b9f4-591896ebad6a,44c59837-bbaf-429a-b3c0-eae434bef011,approved,Perfect timing. Scheduled.,2026-02-16 04:48:50
+52e1a6a1-d0cd-4ab0-b85a-607e7b9b959c,a655b2d4-5ecd-423a-acf8-d2ad592f0564,bd87888d-c59e-4e60-887a-c01bacfae572,request_edit,Change the hashtags to be more specific.,2026-03-04 07:02:32
+04ef9d97-1e03-44a0-87e0-8ffc8a77c4ea,3ab30feb-3b7c-4946-8ab4-5df90e3a5ebc,8dfa738a-8a11-4004-9ea5-063ed650143b,request_edit,Add a CTA at the end.,2026-02-11 11:09:42
+40984d2e-3171-4ecf-8784-06e4d242f01e,55c4016f-700f-4928-8ffa-9e8575a1b2ef,41108c3b-b486-4918-80f7-a4d5e6a03e72,approved,Content is on-brand. Approved.,2026-01-24 04:02:10
