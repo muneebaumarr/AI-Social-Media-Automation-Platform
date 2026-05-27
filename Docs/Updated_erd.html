@@ -1,0 +1,174 @@
+
+<style>
+#erd { padding: 1rem 0; }
+#erd svg { width: 100%; height: auto; }
+#legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 16px 0 0; font-size: 12px; color: var(--color-text-secondary); }
+#legend span { display: flex; align-items: center; gap: 6px; }
+#legend i { font-size: 15px; }
+</style>
+<h2 class="sr-only">Entity Relationship Diagram for AI Social Media Automation Platform — 11 tables with all foreign key relationships shown</h2>
+<div id="erd"></div>
+<div id="legend">
+  <span><i class="ti ti-key" aria-hidden="true"></i> PK = Primary Key</span>
+  <span><i class="ti ti-link" aria-hidden="true"></i> FK = Foreign Key</span>
+  <span>||--o{ = One to Many</span>
+  <span>||--|| = One to One</span>
+</div>
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '13px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    primaryColor: dark ? '#1a1a2e' : '#e8e6fe',
+    primaryBorderColor: dark ? '#534AB7' : '#534AB7',
+    primaryTextColor: dark ? '#c2c0b6' : '#26215C',
+    secondaryColor: dark ? '#0f2a1e' : '#e1f5ee',
+    tertiaryColor: dark ? '#1a1008' : '#faeeda',
+  },
+});
+
+const diagram = `erDiagram
+  users {
+    uuid user_id PK
+    string full_name
+    string email
+    string password_hash
+    enum role
+    timestamp created_at
+  }
+  clients {
+    uuid client_id PK
+    string client_name
+    string timezone
+    boolean active_status
+    timestamp created_at
+  }
+  social_accounts {
+    uuid account_id PK
+    uuid client_id FK
+    enum platform
+    string account_name
+    boolean connected_status
+    string buffer_profile_id
+    timestamp connected_at
+  }
+  content_drafts {
+    uuid draft_id PK
+    uuid client_id FK
+    uuid created_by FK
+    string draft_title
+    text draft_content
+    enum draft_status
+    timestamp created_at
+  }
+  posts {
+    uuid post_id PK
+    uuid draft_id FK
+    enum platform
+    text repurposed_content
+    text caption
+    text hashtags
+    enum status
+    timestamp created_at
+  }
+  ai_generations {
+    uuid generation_id PK
+    uuid draft_id FK
+    enum platform
+    text prompt
+    text generated_text
+    timestamp generated_at
+  }
+  approvals {
+    uuid approval_id PK
+    uuid post_id FK
+    uuid manager_id FK
+    enum approval_status
+    text remarks
+    timestamp approval_date
+  }
+  scheduled_posts {
+    uuid schedule_id PK
+    uuid post_id FK
+    string buffer_update_id
+    timestamp scheduled_time
+    enum schedule_status
+    timestamp created_at
+  }
+  analytics_logs {
+    uuid analytics_id PK
+    uuid post_id FK
+    integer views
+    integer likes
+    integer comments
+    integer shares
+    float engagement_rate
+    timestamp recorded_at
+  }
+  content_recommendations {
+    uuid recommendation_id PK
+    uuid client_id FK
+    date week_start_date
+    date week_end_date
+    enum best_platform
+    text recommendation_text
+    timestamp created_at
+  }
+  audit_logs {
+    uuid log_id PK
+    uuid user_id FK
+    string action
+    string entity_name
+    uuid entity_id
+    timestamp created_at
+  }
+
+  users ||--o{ content_drafts : "creates"
+  users ||--o{ approvals : "reviews"
+  users ||--o{ audit_logs : "triggers"
+  clients ||--o{ content_drafts : "owns"
+  clients ||--o{ social_accounts : "connects"
+  clients ||--o{ content_recommendations : "receives"
+  content_drafts ||--o{ posts : "repurposed into"
+  content_drafts ||--o{ ai_generations : "generates"
+  posts ||--o{ approvals : "reviewed in"
+  posts ||--|| scheduled_posts : "scheduled as"
+  posts ||--o{ analytics_logs : "tracked in"
+`;
+
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
+</script>
