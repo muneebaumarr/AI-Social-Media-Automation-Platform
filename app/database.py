@@ -38,7 +38,7 @@ def get_db():
 
 
 def test_connection():
-    """"
+    """
     Tests the database connection by executing a simple query.
     If the connection is successful, it will print "Database connection successful!".
     Else, it will print the error message.
