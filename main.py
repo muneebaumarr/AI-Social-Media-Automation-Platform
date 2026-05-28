@@ -25,7 +25,7 @@ async def startup_event():
     print("Starting AI social media automation platform...")
     test_connection()
 
-@app.get("/Health")
+@app.get("/health")
 async def health_check():
     return {"status": "running",
              "message": "AI Social Media Automation Platform is running!",
