@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}SocialAI | Create Once, Publish Everywhere{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══ NAV ═══════════════════════════════════════════════ -->
+<nav class="nav-minimal">
+    <div class="container py-3 d-flex align-items-center justify-content-between">
+        <a href="/" class="brand-mark">
+            <span class="dot"></span>SocialAI
+        </a>
+        <div class="d-flex align-items-center">
+            <a href="#features" class="nav-link-minimal d-none d-md-inline">Features</a>
+            <a href="#workflow" class="nav-link-minimal d-none d-md-inline">How it works</a>
+            <a href="/auth/login-page" class="nav-link-minimal">Sign in</a>
+            <a href="/auth/register-page" class="btn-dark-minimal">Get started →</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-pill">
+            <span class="pulse"></span>
+            <span>Save 10+ hours every week</span>
+        </div>
+
+        <h1>
+            Write once.<br>
+            <span class="accent">Post everywhere.</span>
+        </h1>
+
+        <p class="hero-desc">
+            Stop wasting hours rewriting the same post for every platform.
+            Write your idea once and our AI transforms it into perfect posts for
+            Instagram, LinkedIn, Twitter and more, while your team reviews and
+            schedules everything in one place.
+        </p>
+
+        <div class="hero-cta">
+            <a href="/auth/register-page" class="btn-dark-minimal btn-hero">Get Started →</a>
+            <a href="#workflow" class="btn-light-minimal btn-hero">Learn More</a>
+        </div>
+
+        <div class="hero-meta">
+            <div class="hero-meta-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+                No credit card required
+            </div>
+            <div class="hero-meta-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+                6 platforms supported
+            </div>
+            <div class="hero-meta-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+                Free forever plan
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FEATURES ══════════════════════════════════════════ -->
+<section class="section" id="features">
+    <div class="container">
+        <h2 class="section-title">Powerful Features</h2>
+        <p class="section-sub">Everything you need to manage social media</p>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h5>AI Content Repurposing</h5>
+                    <p>Automatically repurpose one draft into platform-specific content</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h5>Approval Workflow</h5>
+                    <p>Managers review and approve content before publishing</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h5>Smart Scheduling</h5>
+                    <p>Schedule posts across multiple platforms with one click</p>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h5>Analytics Dashboard</h5>
+                    <p>Track engagement metrics and get AI-powered insights</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ══════════════════════════════════════ -->
+<section class="section" id="workflow">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-sub">From idea to published in 4 simple steps</p>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-left">
+                    <div class="timeline-number">1</div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <h4>Write Original Content</h4>
+                    <p>Create a single draft with your core message.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-left">
+                    <div class="timeline-number">2</div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <h4>AI Repurposing</h4>
+                    <p>Automatically generate platform-specific versions.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-left">
+                    <div class="timeline-number">3</div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <h4>Manager Review</h4>
+                    <p>Get approval before publishing to ensure quality.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-left">
+                    <div class="timeline-number">4</div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <h4>Schedule &amp; Publish</h4>
+                    <p>Schedule posts and track performance analytics.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-left">
+                    <div class="timeline-number">5</div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <h4>AI Agent Recommendations</h4>
+                    <p>Our AI agent analyzes your content performance and gives actionable recommendations to improve reach and engagement.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══ CTA ═══════════════════════════════════════════════ -->
+<div class="container">
+    <div class="cta-section">
+        <h2>Ready to get your time back?</h2>
+        <p>Join creators saving 10+ hours every week.</p>
+        <a href="/auth/register-page" class="btn-cta">Start free today →</a>
+    </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="container">
+        © 2026 SocialAI. Built with FastAPI, MySQL and Gemini.
+    </div>
+</footer>
+
+{% endblock %}
