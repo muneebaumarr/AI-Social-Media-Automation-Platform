@@ -1,5 +1,5 @@
-from SQLALCHEMY import create_engine, text
-from SQLALCHEMY.orm import sessionmaker 
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker 
 from app.config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 from urllib.parse import quote_plus
 
@@ -48,7 +48,7 @@ def test_connection():
     try:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT DATABASE()"))
-            db_name = result.Fetchone()[0]
+            db_name = result.fetchone()[0]
             print(f"Database connection successful! Connected to database: {db_name}")  
 
             #count tables in the database
@@ -59,7 +59,7 @@ def test_connection():
                 print(f" - {table[0]}")
     except Exception as e:
         print(f"Database connection failed: {e}")
-        
+
 
 
  
