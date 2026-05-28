@@ -6,7 +6,8 @@ from app.models.user import get_user_by_email, create_user
 from app.services.auth_service import (
     hash_password, verify_password, create_access_token,
 )
-
+from fastapi import Request
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter(prefix = "/auth", tags=["auth"])
 
@@ -88,3 +89,17 @@ def logout():
     response = RedirectResponse(url="/auth/login-page")
     response.delete_cookie("access_token")
     return response
+
+templates = Jinja2Templates(directory="app/templates")
+
+
+@router.get("/login-page")
+def login_page(request: Request):
+    """Serves the HTML login page."""
+    return templates.TemplateResponse("auth/login.html", {"request": request})
+
+
+@router.get("/register-page")
+def register_page(request: Request):
+    """Serves the HTML register page."""
+    return templates.TemplateResponse("auth/register.html", {"request": request})
