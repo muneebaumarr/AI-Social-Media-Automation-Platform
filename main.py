@@ -4,6 +4,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from app.database import test_connection
 from app.router import auth
+from app.router import auth, dashboard
+
 
 # Create FastAPI app
 app = FastAPI(
@@ -20,6 +22,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 # Register routers
 app.include_router(auth.router)
+app.include_router(dashboard.router)
 
 # Test database on startup
 @app.on_event("startup")
