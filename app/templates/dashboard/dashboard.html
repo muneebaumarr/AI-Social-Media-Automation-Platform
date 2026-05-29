@@ -1,0 +1,517 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — SocialAI{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background: #fafafa;
+        color: #0a0a0a;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* ─── Sidebar ───────────────────────────────────── */
+    .sidebar {
+        width: 240px;
+        height: 100vh;
+        background:
+            radial-gradient(ellipse 200% 150% at 50% 0%, rgba(30, 65, 160, 0.7) 0%, transparent 100%),
+            linear-gradient(180deg, #0a1628 0%, #060c18 100%);
+        color: #ffffff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        z-index: 50;
+    }
+
+    .sidebar-brand {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: -0.02em;
+    }
+
+    .sidebar-brand .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #3b82f6;
+        border-radius: 50%;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    .sidebar-nav {
+        flex: 1;
+        padding: 16px 12px;
+    }
+
+    .nav-link-side {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        color: #a3a3a3;
+        text-decoration: none;
+        font-size: 0.92rem;
+        font-weight: 500;
+        border-radius: 8px;
+        margin-bottom: 2px;
+        transition: all 0.15s;
+    }
+
+    .nav-link-side:hover {
+        background: rgba(255,255,255,0.08);
+        color: #ffffff;
+    }
+
+    .nav-link-side.active {
+        background: rgba(255,255,255,0.12);
+        color: #ffffff;
+    }
+
+    .nav-link-side svg { width: 18px; height: 18px; }
+
+    .sidebar-user {
+        padding: 16px 20px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        background: #ffffff;
+        color: #0a0a0a;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .user-name {
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: #ffffff;
+    }
+
+    .user-role {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+        text-transform: capitalize;
+    }
+
+    .sidebar-user a {
+        display: block;
+        color: #737373;
+        font-size: 0.78rem;
+        text-decoration: none;
+        padding: 6px 0;
+    }
+
+    .sidebar-user a:hover { color: #ef4444; }
+
+    /* ─── Main content ──────────────────────────────── */
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 4px 0;
+    }
+
+    .page-header p {
+        color: #737373;
+        font-size: 0.92rem;
+        margin: 0;
+    }
+
+    .btn-primary-dark {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: #ffffff;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s;
+        box-shadow: 0 2px 12px rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-primary-dark:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5);
+    }
+
+    /* ─── Stat cards ────────────────────────────────── */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        padding: 20px 24px;
+        border-radius: 14px;
+        transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+        border-color: #d4d4d4;
+        transform: translateY(-2px);
+    }
+
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+    }
+
+    .stat-icon svg { width: 18px; height: 18px; color: #0a0a0a; }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #0a0a0a;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: #737373;
+    }
+
+    /* ─── Workflow steps ────────────────────────────── */
+    .panel {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: #0a0a0a;
+    }
+
+    .workflow-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .workflow-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.15s;
+    }
+
+    .workflow-pill.done {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #065f46;
+    }
+
+    .workflow-pill.todo {
+        background: #fafafa;
+        border: 1px solid #e5e5e5;
+        color: #525252;
+    }
+
+    .workflow-pill:hover {
+        transform: translateY(-1px);
+    }
+
+    .workflow-pill .num {
+        width: 18px;
+        height: 18px;
+        background: #d4d4d4;
+        color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+
+    .workflow-pill.done .num {
+        background: #10b981;
+    }
+
+    .workflow-arrow {
+        color: #d4d4d4;
+        font-weight: 300;
+    }
+
+    /* ─── Recent drafts table ───────────────────────── */
+    .draft-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .draft-row:last-child { border-bottom: none; }
+
+    .draft-title {
+        font-size: 0.92rem;
+        font-weight: 500;
+        color: #0a0a0a;
+        margin-bottom: 2px;
+    }
+
+    .draft-meta {
+        font-size: 0.78rem;
+        color: #a3a3a3;
+    }
+
+    .status-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 6px;
+        text-transform: capitalize;
+    }
+
+    .status-draft       { background: #f5f5f5; color: #525252; }
+    .status-submitted   { background: #fef3c7; color: #92400e; }
+    .status-repurposed  { background: #ecfdf5; color: #065f46; }
+    .status-archived    { background: #f5f5f5; color: #a3a3a3; }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #737373;
+    }
+
+    .empty-state .icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }
+
+    .empty-state .btn-primary-dark {
+        margin-top: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <span class="dot"></span>SocialAI
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Dashboard
+        </a>
+        <a href="/drafts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Drafts
+        </a>
+        <a href="/posts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+            </svg>
+            Posts
+        </a>
+        {% if user.role in ['manager', 'admin'] %}
+        <a href="/manager" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            Review Queue
+        </a>
+        {% endif %}
+        <a href="/analytics" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            Analytics
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main-content">
+
+    <div class="page-header">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Welcome back, {{ user.name }}</p>
+        </div>
+        <a href="/drafts/new" class="btn-primary-dark">+ New Draft</a>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+            </div>
+            <div class="stat-value">{{ total_drafts }}</div>
+            <div class="stat-label">My Drafts</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                </svg>
+            </div>
+            <div class="stat-value">{{ total_posts }}</div>
+            <div class="stat-label">Total Posts</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="stat-value">{{ pending_approval }}</div>
+            <div class="stat-label">Pending Approval</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <div class="stat-value">{{ published }}</div>
+            <div class="stat-label">Published</div>
+        </div>
+    </div>
+
+    <!-- Workflow steps -->
+    <div class="panel">
+        <div class="panel-title">Your Workflow</div>
+        <div class="workflow-pills">
+            <a href="/drafts/new" class="workflow-pill {% if total_drafts > 0 %}done{% else %}todo{% endif %}">
+                <span class="num">{% if total_drafts > 0 %}✓{% else %}1{% endif %}</span>
+                Write Draft
+            </a>
+            <span class="workflow-arrow">→</span>
+
+            <a href="/drafts" class="workflow-pill {% if total_posts > 0 %}done{% else %}todo{% endif %}">
+                <span class="num">{% if total_posts > 0 %}✓{% else %}2{% endif %}</span>
+                AI Repurpose
+            </a>
+            <span class="workflow-arrow">→</span>
+
+            <a href="/manager" class="workflow-pill {% if pending_approval == 0 and total_posts > 0 %}done{% else %}todo{% endif %}">
+                <span class="num">{% if pending_approval == 0 and total_posts > 0 %}✓{% else %}3{% endif %}</span>
+                Get Approval
+            </a>
+            <span class="workflow-arrow">→</span>
+
+            <a href="/posts" class="workflow-pill todo">
+                <span class="num">4</span>
+                Schedule
+            </a>
+            <span class="workflow-arrow">→</span>
+
+            <a href="/analytics" class="workflow-pill todo">
+                <span class="num">5</span>
+                Analyse
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent drafts -->
+    <div class="panel">
+        <div class="panel-title">Recent Drafts</div>
+
+        {% if recent_drafts %}
+            {% for draft in recent_drafts %}
+            <div class="draft-row">
+                <div>
+                    <div class="draft-title">{{ draft.draft_title }}</div>
+                    <div class="draft-meta">{{ draft.client_name or 'No client' }}</div>
+                </div>
+                <span class="status-badge status-{{ draft.draft_status }}">
+                    {{ draft.draft_status }}
+                </span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="icon">📝</div>
+                <p>You haven't created any drafts yet.</p>
+                <a href="/drafts/new" class="btn-primary-dark">Create your first draft →</a>
+            </div>
+        {% endif %}
+    </div>
+
+</main>
+
+{% endblock %}
