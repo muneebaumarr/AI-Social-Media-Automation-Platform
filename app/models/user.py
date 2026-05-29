@@ -90,3 +90,18 @@ def update_user(db: Session, user_id: str, full_name: str = None, email: str = N
     db.commit()
 
     return get_user_by_id(db, user_id)
+
+
+def get_all_clients(db: Session):
+    """
+    Returns all active clients.
+    Used when creating a draft (writer must pick a client).
+    """
+    query = text("""
+        SELECT client_id, client_name, timezone
+        FROM   clients
+        WHERE  active_status = 1
+        ORDER BY client_name ASC
+    """)
+    result = db.execute(query)
+    return result.mappings().all()
