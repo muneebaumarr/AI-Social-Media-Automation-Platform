@@ -13,6 +13,8 @@ import bcrypt
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from fastapi import HTTPException, Request, status
+
 
 
 def hash_password(plain_password:str)->str:
@@ -55,3 +57,39 @@ def decode_access_token(token: str):
         return payload
     except JWTError:
         return None
+    
+
+def get_current_user(request: Request) ->dict:
+    """"
+    Reads the Authorization header from the request, extracts the token, decodes it, and returns the user information from JWT if valid. 
+    If the token is missing or invalid, it raises an HTTP 401 Unauthorized error.
+    """
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing access token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    payload = decode_access_token(token)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid access token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return payload
+
+
+def get_optional_user(request: Request) -> dict | None:
+    """
+    Similar to get_current_user, but returns None instead of raising an error if the token is missing or invalid. 
+    This allows endpoints to optionally have a user context without requiring authentication.
+    """
+    token = request.cookies.get("access_token")
+    if not token:
+        return None
+    payload = decode_access_token(token)
+    return payload
+
+
