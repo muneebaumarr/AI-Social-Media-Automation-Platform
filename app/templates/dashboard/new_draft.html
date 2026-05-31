@@ -1,0 +1,651 @@
+{% extends "base.html" %}
+
+{% block title %}New Draft — SocialAI{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background: #fafafa;
+        color: #0a0a0a;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* ─── Sidebar (same as dashboard) ───────────────── */
+    .sidebar {
+        width: 240px;
+        height: 100vh;
+        background: #0a0a0a;
+        color: #ffffff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        z-index: 50;
+    }
+
+    .sidebar-brand {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+
+    .sidebar-brand .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #ffffff;
+        border-radius: 50%;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    .sidebar-nav { flex: 1; padding: 16px 12px; }
+
+    .nav-link-side {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        color: #a3a3a3;
+        text-decoration: none;
+        font-size: 0.92rem;
+        font-weight: 500;
+        border-radius: 8px;
+        margin-bottom: 2px;
+        transition: all 0.15s;
+    }
+
+    .nav-link-side:hover {
+        background: rgba(255,255,255,0.08);
+        color: #ffffff;
+    }
+
+    .nav-link-side svg { width: 18px; height: 18px; }
+
+    .sidebar-user {
+        padding: 16px 20px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+
+    .user-avatar {
+        width: 36px; height: 36px;
+        background: #ffffff;
+        color: #0a0a0a;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700;
+    }
+
+    .user-name { font-size: 0.88rem; color: #ffffff; }
+    .user-role { font-size: 0.75rem; color: #a3a3a3; text-transform: capitalize; }
+
+    .sidebar-user a {
+        display: block;
+        color: #737373;
+        font-size: 0.78rem;
+        text-decoration: none;
+        padding: 6px 0;
+    }
+
+    .sidebar-user a:hover { color: #ef4444; }
+
+    /* ─── Main content ──────────────────────────────── */
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        max-width: 900px;
+    }
+
+    .page-header { margin-bottom: 32px; }
+
+    .page-header h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 4px 0;
+    }
+
+    .page-header p {
+        color: #737373;
+        font-size: 0.92rem;
+        margin: 0;
+    }
+
+    /* ─── Form panel ────────────────────────────────── */
+    .form-panel {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 28px;
+        margin-bottom: 20px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+
+    .form-group:last-child { margin-bottom: 0; }
+
+    .form-label {
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: #0a0a0a;
+        margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.92rem;
+        color: #0a0a0a;
+        font-family: inherit;
+        transition: all 0.15s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: #0a0a0a;
+        box-shadow: 0 0 0 3px rgba(10,10,10,0.05);
+    }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.5;
+    }
+
+    .form-helper {
+        font-size: 0.78rem;
+        color: #a3a3a3;
+        margin-top: 6px;
+    }
+
+    /* ─── Platform selector ─────────────────────────── */
+    .platforms-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .platform-card {
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 10px;
+        padding: 12px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.88rem;
+        font-weight: 500;
+        text-transform: capitalize;
+        transition: all 0.15s;
+        user-select: none;
+    }
+
+    .platform-card:hover {
+        border-color: #a3a3a3;
+        background: #fafafa;
+    }
+
+    .platform-card.selected {
+        border-color: #0a0a0a;
+        background: #0a0a0a;
+        color: #ffffff;
+    }
+
+    /* ─── Buttons ───────────────────────────────────── */
+    .btn-primary-dark {
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 12px 22px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary-dark:hover:not(:disabled) {
+        background: #2a2a2a;
+        transform: translateY(-1px);
+    }
+
+    .btn-primary-dark:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .btn-light {
+        background: transparent;
+        color: #0a0a0a;
+        border: 1px solid #e5e5e5;
+        padding: 12px 22px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-light:hover { border-color: #0a0a0a; }
+
+    /* ─── Error / Alert boxes ──────────────────────── */
+    .alert-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        margin-bottom: 16px;
+    }
+
+    /* ─── Loading state ─────────────────────────────── */
+    .loading-screen {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .loading-icon {
+        width: 64px;
+        height: 64px;
+        background: #f5f5f5;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        animation: pulse-scale 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-scale {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50%      { transform: scale(1.05); opacity: 0.7; }
+    }
+
+    .loading-screen h2 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .loading-screen p {
+        color: #737373;
+        font-size: 0.92rem;
+        margin-bottom: 20px;
+    }
+
+    .loading-platforms {
+        display: inline-flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .loading-platforms span {
+        background: #f5f5f5;
+        color: #525252;
+        font-size: 0.78rem;
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-transform: capitalize;
+    }
+
+    /* ─── Results screen ────────────────────────────── */
+    .results-header {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #ecfdf5;
+        color: #065f46;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 16px;
+    }
+
+    .post-result {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 12px;
+    }
+
+    .post-result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .platform-badge {
+        background: #f5f5f5;
+        color: #0a0a0a;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .post-content {
+        color: #0a0a0a;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        margin-bottom: 8px;
+        white-space: pre-wrap;
+    }
+
+    .post-hashtags {
+        color: #2563eb;
+        font-size: 0.82rem;
+        margin-top: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span>SocialAI</div>
+
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Dashboard
+        </a>
+        <a href="/drafts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Drafts
+        </a>
+        <a href="/posts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+            </svg>
+            Posts
+        </a>
+        {% if user.role in ['manager', 'admin'] %}
+        <a href="/manager" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            Review Queue
+        </a>
+        {% endif %}
+        <a href="/analytics" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            Analytics
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main-content">
+
+    <!-- WRITE STEP -->
+    <div id="writeStep">
+        <div class="page-header">
+            <h1>New Draft</h1>
+            <p>Write your content once. AI will repurpose it for every platform.</p>
+        </div>
+
+        <div id="errorBox" class="alert-error" style="display:none;"></div>
+
+        <form id="draftForm">
+
+            <div class="form-panel">
+                <div class="form-group">
+                    <label class="form-label">Client / Brand</label>
+                    <select name="client_id" class="form-select" required>
+                        {% for c in clients %}
+                        <option value="{{ c.client_id }}">{{ c.client_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Draft Title</label>
+                    <input type="text" name="draft_title" class="form-input"
+                           placeholder="e.g. Announcing our new product launch"
+                           minlength="3" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Draft Content</label>
+                    <textarea name="draft_content" class="form-textarea" rows="6"
+                              placeholder="Write your original content here. The AI will repurpose it for each selected platform..."
+                              minlength="20" required></textarea>
+                    <div class="form-helper">
+                        <span id="charCount">0</span> characters · minimum 20
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-panel">
+                <div class="form-group">
+                    <label class="form-label">Target Platforms</label>
+                    <div class="form-helper" style="margin-bottom: 12px;">
+                        Click to select which platforms to generate posts for
+                    </div>
+
+                    <div class="platforms-grid">
+                        <div class="platform-card selected" data-platform="instagram">Instagram</div>
+                        <div class="platform-card selected" data-platform="linkedin">LinkedIn</div>
+                        <div class="platform-card" data-platform="twitter">Twitter</div>
+                        <div class="platform-card" data-platform="facebook">Facebook</div>
+                        <div class="platform-card" data-platform="tiktok">TikTok</div>
+                        <div class="platform-card" data-platform="youtube">YouTube</div>
+                    </div>
+
+                    <div class="form-helper" style="margin-top: 10px;">
+                        <span id="platformCount">2</span> platforms selected
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary-dark" id="submitBtn">
+                🤖 Save &amp; Repurpose with AI
+            </button>
+            <a href="/drafts" class="btn-light">Cancel</a>
+        </form>
+    </div>
+
+    <!-- LOADING STEP -->
+    <div id="loadingStep" style="display:none;">
+        <div class="loading-screen">
+            <div class="loading-icon">🤖</div>
+            <h2>AI is repurposing your content</h2>
+            <p>This usually takes 10-15 seconds per platform</p>
+            <div class="loading-platforms" id="loadingPlatforms"></div>
+        </div>
+    </div>
+
+    <!-- RESULTS STEP -->
+    <div id="resultsStep" style="display:none;">
+        <div class="page-header">
+            <div class="results-header" id="resultsCount">
+                ✅ Posts created and sent for approval
+            </div>
+            <h1>Posts Generated</h1>
+            <p>Managers will be notified to review these posts.</p>
+        </div>
+
+        <div id="resultsList"></div>
+
+        <div style="margin-top: 24px;">
+            <a href="/posts" class="btn-primary-dark">View all posts →</a>
+            <a href="/drafts/new" class="btn-light">Create another draft</a>
+        </div>
+    </div>
+
+</main>
+
+<script>
+// ─── Selected platforms ─────────────────────────────────
+const selectedPlatforms = new Set(['instagram', 'linkedin']);
+
+document.querySelectorAll('.platform-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const platform = card.dataset.platform;
+        if (selectedPlatforms.has(platform)) {
+            selectedPlatforms.delete(platform);
+            card.classList.remove('selected');
+        } else {
+            selectedPlatforms.add(platform);
+            card.classList.add('selected');
+        }
+        document.getElementById('platformCount').textContent = selectedPlatforms.size;
+    });
+});
+
+// ─── Character counter ──────────────────────────────────
+const textarea = document.querySelector('[name="draft_content"]');
+textarea.addEventListener('input', () => {
+    document.getElementById('charCount').textContent = textarea.value.length;
+});
+
+// ─── Form submission ────────────────────────────────────
+document.getElementById('draftForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const errorBox  = document.getElementById('errorBox');
+    const submitBtn = document.getElementById('submitBtn');
+    errorBox.style.display = 'none';
+
+    // Validate platforms
+    if (selectedPlatforms.size === 0) {
+        errorBox.textContent = 'Please select at least one platform';
+        errorBox.style.display = 'block';
+        return;
+    }
+
+    submitBtn.disabled = true;
+    const formData = new FormData(e.target);
+
+    try {
+        // ─── 1. Save the draft ──────────────────────────
+        const draftRes = await fetch('/api/drafts', {
+            method: 'POST',
+            body:   formData,
+        });
+        const draftData = await draftRes.json();
+
+        if (!draftRes.ok) {
+            throw new Error(draftData.detail || 'Failed to save draft');
+        }
+
+        // ─── 2. Show loading screen ─────────────────────
+        document.getElementById('writeStep').style.display    = 'none';
+        document.getElementById('loadingStep').style.display  = 'block';
+
+        const platformsContainer = document.getElementById('loadingPlatforms');
+        platformsContainer.innerHTML = '';
+        selectedPlatforms.forEach(p => {
+            const tag = document.createElement('span');
+            tag.textContent = p;
+            platformsContainer.appendChild(tag);
+        });
+
+        // ─── 3. Call repurpose API ──────────────────────
+        const platformsString = Array.from(selectedPlatforms).join(',');
+        const repurposeForm   = new FormData();
+        repurposeForm.append('draft_id', draftData.draft_id);
+        repurposeForm.append('platforms', platformsString);
+
+        const repurposeRes = await fetch('/api/repurpose', {
+            method: 'POST',
+            body:   repurposeForm,
+        });
+        const repurposeData = await repurposeRes.json();
+
+        if (!repurposeRes.ok) {
+            throw new Error(repurposeData.detail || 'Failed to repurpose');
+        }
+
+        // ─── 4. Show results ────────────────────────────
+        document.getElementById('loadingStep').style.display = 'none';
+        document.getElementById('resultsStep').style.display = 'block';
+
+        document.getElementById('resultsCount').textContent =
+            `✅ ${repurposeData.post_count} post${repurposeData.post_count !== 1 ? 's' : ''} created and sent for approval`;
+
+        const list = document.getElementById('resultsList');
+        list.innerHTML = '';
+        repurposeData.posts.forEach(post => {
+            const card = document.createElement('div');
+            card.className = 'post-result';
+            card.innerHTML = `
+                <div class="post-result-header">
+                    <span class="platform-badge">${post.platform}</span>
+                    <span class="status-pending">Pending Approval</span>
+                </div>
+                <div class="post-content">${escapeHtml(post.repurposed_content)}</div>
+                ${post.hashtags ? `<div class="post-hashtags">${escapeHtml(post.hashtags)}</div>` : ''}
+            `;
+            list.appendChild(card);
+        });
+
+    } catch (err) {
+        // Show error and go back to write step
+        document.getElementById('writeStep').style.display    = 'block';
+        document.getElementById('loadingStep').style.display  = 'none';
+        document.getElementById('resultsStep').style.display  = 'none';
+
+        errorBox.textContent = err.message;
+        errorBox.style.display = 'block';
+        submitBtn.disabled = false;
+    }
+});
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+}
+</script>
+
+{% endblock %}
