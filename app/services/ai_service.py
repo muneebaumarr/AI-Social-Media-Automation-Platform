@@ -1,5 +1,6 @@
 import google.generativeai as genai
 import json
+import re
 
 
 
@@ -11,10 +12,9 @@ genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(
     model_name="gemini-2.5-flash",
     generation_config={
-        "temperature":        0.9,
-        "top_p":              0.95,
-        "max_output_tokens":  2048,
-        "response_mime_type": "application/json",
+        "temperature":       0.9,
+        "top_p":             0.95,
+        "max_output_tokens": 8192,
     },
 )
 
@@ -140,9 +140,21 @@ Return a JSON object with exactly these three fields:
 - caption: the single hook line only — the very first sentence that stops the scroll.
 - hashtags: space-separated hashtags starting with # — ALL hashtags go here, nowhere else."""
 
+    response = None
     try:
         response = model.generate_content(prompt)
-        data = json.loads(response.text)
+        raw = response.text or ""
+
+        # Strip markdown fences Gemini sometimes adds
+        cleaned = re.sub(r"^```(?:json)?\s*", "", raw.strip())
+        cleaned = re.sub(r"\s*```$", "", cleaned).strip()
+
+        # Extract the first {...} block in case there's leading/trailing text
+        match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        if match:
+            cleaned = match.group(0)
+
+        data = json.loads(cleaned)
 
         return {
             "platform":           platform,
@@ -154,7 +166,9 @@ Return a JSON object with exactly these three fields:
         }
 
     except Exception as e:
+        raw_preview = (response.text[:300] if response and response.text else "no response")
         print(f"AI error for {platform}: {e}")
+        print(f"Raw response: {raw_preview}")
         return {
             "platform":           platform,
             "repurposed_content": "",
