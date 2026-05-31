@@ -128,3 +128,24 @@ def get_post_by_id(db: Session, post_id: str):
     """)
     result = db.execute(query, {"post_id": post_id})
     return result.mappings().first()
+
+
+def get_posts_with_schedule_for_user(db: Session, user_id: str):
+    """
+    Returns all posts owned by user along with scheduling info.
+    Used by the Posts page so we know which posts are scheduled.
+    """
+    query = text("""
+        SELECT p.*, cd.draft_title,
+               sp.schedule_id, sp.scheduled_time, sp.schedule_status,
+               (SELECT remarks FROM approvals
+                WHERE post_id = p.post_id
+                ORDER BY approval_date DESC LIMIT 1) AS latest_remarks
+        FROM   posts p
+        JOIN   content_drafts cd ON cd.draft_id = p.draft_id
+        LEFT JOIN scheduled_posts sp ON sp.post_id = p.post_id
+        WHERE  cd.created_by = :user_id
+        ORDER BY p.created_at DESC
+    """)
+    result = db.execute(query, {"user_id": user_id})
+    return result.mappings().all()
