@@ -1,0 +1,424 @@
+{% extends "base.html" %}
+
+{% block title %}Review Queue — SocialAI{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background: #fafafa;
+        color: #0a0a0a;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Sidebar (reused) */
+    .sidebar {
+        width: 240px; height: 100vh;
+        background: #0a0a0a; color: #ffffff;
+        position: fixed; top: 0; left: 0;
+        display: flex; flex-direction: column;
+        z-index: 50;
+    }
+    .sidebar-brand {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-weight: 700; font-size: 1.05rem;
+    }
+    .sidebar-brand .dot {
+        display: inline-block; width: 8px; height: 8px;
+        background: #ffffff; border-radius: 50%;
+        margin-right: 8px; vertical-align: middle;
+    }
+    .sidebar-nav { flex: 1; padding: 16px 12px; }
+    .nav-link-side {
+        display: flex; align-items: center; gap: 12px;
+        padding: 10px 14px; color: #a3a3a3;
+        text-decoration: none; font-size: 0.92rem;
+        font-weight: 500; border-radius: 8px;
+        margin-bottom: 2px; transition: all 0.15s;
+    }
+    .nav-link-side:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .nav-link-side.active { background: rgba(255,255,255,0.12); color: #ffffff; }
+    .nav-link-side svg { width: 18px; height: 18px; }
+    .sidebar-user { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .user-avatar {
+        width: 36px; height: 36px;
+        background: #ffffff; color: #0a0a0a;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700;
+    }
+    .user-name { font-size: 0.88rem; color: #ffffff; }
+    .user-role { font-size: 0.75rem; color: #a3a3a3; text-transform: capitalize; }
+    .sidebar-user a {
+        display: block; color: #737373;
+        font-size: 0.78rem; text-decoration: none; padding: 6px 0;
+    }
+    .sidebar-user a:hover { color: #ef4444; }
+
+    /* Main content */
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        max-width: 1000px;
+    }
+
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 {
+        font-size: 1.6rem; font-weight: 700;
+        letter-spacing: -0.02em; margin: 0 0 4px 0;
+    }
+    .page-header p { color: #737373; font-size: 0.92rem; margin: 0; }
+
+    /* Post card */
+    .post-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 16px;
+        transition: opacity 0.3s ease;
+    }
+
+    .post-card.removing {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    .post-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    .platform-badge {
+        background: #f5f5f5;
+        color: #0a0a0a;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .author-meta {
+        font-size: 0.78rem;
+        color: #a3a3a3;
+        margin-top: 4px;
+    }
+
+    .draft-title {
+        font-size: 0.78rem;
+        color: #525252;
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+
+    .post-body {
+        background: #fafafa;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .post-content {
+        color: #0a0a0a;
+        font-size: 0.92rem;
+        line-height: 1.55;
+        white-space: pre-wrap;
+        margin-bottom: 10px;
+    }
+
+    .post-caption {
+        font-size: 0.85rem;
+        color: #525252;
+        font-style: italic;
+        margin-top: 8px;
+    }
+
+    .post-hashtags {
+        color: #2563eb;
+        font-size: 0.82rem;
+        margin-top: 8px;
+    }
+
+    /* Remarks textarea */
+    .remarks-input {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.88rem;
+        color: #0a0a0a;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 60px;
+        margin-bottom: 12px;
+        transition: all 0.15s;
+    }
+
+    .remarks-input:focus {
+        outline: none;
+        border-color: #0a0a0a;
+        box-shadow: 0 0 0 3px rgba(10,10,10,0.05);
+    }
+
+    /* Action buttons */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        flex: 1;
+        padding: 10px 16px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+        color: #ffffff;
+    }
+
+    .btn-approve { background: #10b981; }
+    .btn-approve:hover:not(:disabled) { background: #059669; transform: translateY(-1px); }
+
+    .btn-edit    { background: #f59e0b; }
+    .btn-edit:hover:not(:disabled) { background: #d97706; transform: translateY(-1px); }
+
+    .btn-reject  { background: #ef4444; }
+    .btn-reject:hover:not(:disabled) { background: #dc2626; transform: translateY(-1px); }
+
+    .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Empty state */
+    .empty-state {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 80px 20px;
+        text-align: center;
+    }
+
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state h3 {
+        font-size: 1.1rem; font-weight: 600;
+        color: #0a0a0a; margin-bottom: 6px;
+    }
+    .empty-state p { color: #737373; font-size: 0.92rem; margin: 0; }
+
+    /* Toast notification */
+    .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #10b981; }
+    .toast.error   { background: #ef4444; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span>SocialAI</div>
+
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Dashboard
+        </a>
+        <a href="/drafts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Drafts
+        </a>
+        <a href="/posts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6"/>
+            </svg>
+            Posts
+        </a>
+        <a href="/manager" class="nav-link-side active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            Review Queue
+        </a>
+        <a href="/analytics" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            Analytics
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main-content">
+
+    <div class="page-header">
+        <h1>Review Queue</h1>
+        <p id="queueCounter">
+            {% if posts %}
+                {{ posts|length }} post{{ 's' if posts|length != 1 else '' }} waiting for your review
+            {% else %}
+                All caught up!
+            {% endif %}
+        </p>
+    </div>
+
+    <div id="postsList">
+        {% if posts %}
+            {% for post in posts %}
+            <div class="post-card" data-post-id="{{ post.post_id }}">
+                <div class="post-card-header">
+                    <div>
+                        <span class="platform-badge">{{ post.platform }}</span>
+                        <div class="draft-title">Draft: {{ post.draft_title }}</div>
+                        <div class="author-meta">by {{ post.author_name }}</div>
+                    </div>
+                </div>
+
+                <div class="post-body">
+                    <div class="post-content">{{ post.repurposed_content }}</div>
+                    {% if post.caption %}
+                    <div class="post-caption">"{{ post.caption }}"</div>
+                    {% endif %}
+                    {% if post.hashtags %}
+                    <div class="post-hashtags">{{ post.hashtags }}</div>
+                    {% endif %}
+                </div>
+
+                <textarea
+                    class="remarks-input"
+                    placeholder="Add remarks for the writer (optional)..."
+                    id="remarks-{{ post.post_id }}"
+                ></textarea>
+
+                <div class="action-buttons">
+                    <button class="btn-action btn-approve"
+                            onclick="handleAction('{{ post.post_id }}', 'approved')">
+                        ✓ Approve
+                    </button>
+                    <button class="btn-action btn-edit"
+                            onclick="handleAction('{{ post.post_id }}', 'request_edit')">
+                        ✎ Request Edit
+                    </button>
+                    <button class="btn-action btn-reject"
+                            onclick="handleAction('{{ post.post_id }}', 'rejected')">
+                        ✗ Reject
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state" id="emptyState">
+                <div class="icon">🎉</div>
+                <h3>All caught up!</h3>
+                <p>No posts are waiting for approval right now.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+async function handleAction(postId, status) {
+    const card    = document.querySelector(`[data-post-id="${postId}"]`);
+    const remarks = document.getElementById(`remarks-${postId}`).value;
+
+    // Disable all buttons on this card to prevent double-clicking
+    card.querySelectorAll('.btn-action').forEach(b => b.disabled = true);
+
+    const formData = new FormData();
+    formData.append('approval_status', status);
+    formData.append('remarks', remarks);
+
+    try {
+        const res = await fetch(`/api/posts/${postId}/approve`, {
+            method: 'POST',
+            body:   formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.detail || 'Action failed');
+        }
+
+        // Show success toast
+        showToast(data.message, 'success');
+
+        // Animate card removal
+        card.classList.add('removing');
+        setTimeout(() => {
+            card.remove();
+            updateCounter();
+        }, 300);
+
+    } catch (err) {
+        showToast(err.message, 'error');
+        card.querySelectorAll('.btn-action').forEach(b => b.disabled = false);
+    }
+}
+
+function updateCounter() {
+    const remaining = document.querySelectorAll('.post-card').length;
+    const counter = document.getElementById('queueCounter');
+
+    if (remaining === 0) {
+        counter.textContent = 'All caught up!';
+        document.getElementById('postsList').innerHTML = `
+            <div class="empty-state">
+                <div class="icon">🎉</div>
+                <h3>All caught up!</h3>
+                <p>No posts are waiting for approval right now.</p>
+            </div>
+        `;
+    } else {
+        counter.textContent = `${remaining} post${remaining !== 1 ? 's' : ''} waiting for your review`;
+    }
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+</script>
+
+{% endblock %}
