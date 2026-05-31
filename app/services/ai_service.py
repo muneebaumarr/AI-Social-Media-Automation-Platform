@@ -1,23 +1,21 @@
 import google.generativeai as genai
-import json 
-import re
-import os
+import json
+
 
 
 from app.config import GEMINI_API_KEY
 
 
 genai.configure(api_key=GEMINI_API_KEY)
-# Configuration for more creative output
-generation_config = {
-    "temperature":      0.9,    # Higher = more creative (0.0 to 1.0)
-    "top_p":            0.95,   # Nucleus sampling
-    "max_output_tokens": 1024,  # Maximum response length
-}
 
 model = genai.GenerativeModel(
     model_name="gemini-2.5-flash",
-    generation_config=generation_config,
+    generation_config={
+        "temperature":        0.9,
+        "top_p":              0.95,
+        "max_output_tokens":  2048,
+        "response_mime_type": "application/json",
+    },
 )
 
 # Rules for each platform
@@ -120,7 +118,7 @@ def repurpose_for_platform(draft_title: str, draft_content: str, platform: str) 
         f"TONE: {rule['tone']}\n"
         f"FORMAT: {rule['format']}\n"
         f"STORYTELLING: {rule['storytelling']}\n"
-        f"HASHTAGS: Generate exactly {rule['hashtag_count']} — put them ONLY in the hashtags JSON field, never in the post body.\n"
+        f"HASHTAGS: Generate exactly {rule['hashtag_count']} — put them ONLY in the hashtags field, never in the post body.\n"
     )
 
     prompt = f"""You are a human copywriter and storyteller with 10 years of experience writing viral social media content. \
@@ -137,54 +135,20 @@ ORIGINAL CONTENT: {draft_content}
 {HUMANIZE_RULES}
 
 {platform_block}
-OUTPUT RULES:
-- "repurposed_content": the full post body — NO hashtags inside it, ever.
-- "caption": the single hook line only — the very first sentence that stops the scroll.
-- "hashtags": space-separated hashtags starting with # — ALL hashtags go here, nowhere else.
-
-Respond ONLY with valid JSON. No markdown, no code blocks, no explanation — just raw JSON:
-{{
-  "repurposed_content": "...",
-  "caption": "...",
-  "hashtags": "..."
-}}"""
+Return a JSON object with exactly these three fields:
+- repurposed_content: the full post body — NO hashtags inside it, ever.
+- caption: the single hook line only — the very first sentence that stops the scroll.
+- hashtags: space-separated hashtags starting with # — ALL hashtags go here, nowhere else."""
 
     try:
         response = model.generate_content(prompt)
-        raw_text = response.text.strip()
-
-        # ─── Clean the response thoroughly ──────────────────────
-        # Remove markdown code blocks
-        cleaned = re.sub(r"```(?:json)?\s*", "", raw_text)
-        cleaned = re.sub(r"\s*```", "", cleaned)
-        cleaned = cleaned.strip()
-
-        # Extract just the JSON object using regex
-        json_match = re.search(r"\{.*\}", cleaned, re.DOTALL)
-        if json_match:
-            cleaned = json_match.group(0)
-
-        # Parse JSON
-        data = json.loads(cleaned)
+        data = json.loads(response.text)
 
         return {
             "platform":           platform,
             "repurposed_content": data.get("repurposed_content", "").strip(),
             "caption":            data.get("caption", "").strip(),
             "hashtags":           data.get("hashtags", "").strip(),
-            "prompt":             prompt,
-            "success":            True,
-        }
-
-    except json.JSONDecodeError as e:
-        # Fallback if Gemini returns invalid JSON
-        print(f"JSON parse error for {platform}: {e}")
-        print(f"Raw response: {raw_text[:200]}")
-        return {
-            "platform":           platform,
-            "repurposed_content": raw_text,
-            "caption":            "",
-            "hashtags":           "",
             "prompt":             prompt,
             "success":            True,
         }
@@ -199,3 +163,7 @@ Respond ONLY with valid JSON. No markdown, no code blocks, no explanation — ju
             "error":              str(e),
             "success":            False,
         }
+
+
+def repurpose_for_platforms(draft_title: str, draft_content: str, platforms: list) -> list:
+    return [repurpose_for_platform(draft_title, draft_content, p) for p in platforms]
