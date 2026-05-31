@@ -168,6 +168,13 @@ def repurpose_draft_api(
             "hashtags":           r.get("hashtags", ""),
         })
 
+    if not saved_posts:
+        errors = [r.get("error", "unknown error") for r in results if not r.get("success")]
+        raise HTTPException(
+            status_code=500,
+            detail=f"AI generation failed for all platforms. Errors: {'; '.join(errors)}",
+        )
+
     # Update draft status
     update_draft_status(db, draft_id, "repurposed")
 
