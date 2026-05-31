@@ -1,0 +1,581 @@
+{% extends "base.html" %}
+
+{% block title %}Posts — SocialAI{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background: #fafafa;
+        color: #0a0a0a;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 240px; height: 100vh;
+        background: #0a0a0a; color: #ffffff;
+        position: fixed; top: 0; left: 0;
+        display: flex; flex-direction: column;
+        z-index: 50;
+    }
+    .sidebar-brand {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-weight: 700; font-size: 1.05rem;
+    }
+    .sidebar-brand .dot {
+        display: inline-block; width: 8px; height: 8px;
+        background: #ffffff; border-radius: 50%;
+        margin-right: 8px; vertical-align: middle;
+    }
+    .sidebar-nav { flex: 1; padding: 16px 12px; }
+    .nav-link-side {
+        display: flex; align-items: center; gap: 12px;
+        padding: 10px 14px; color: #a3a3a3;
+        text-decoration: none; font-size: 0.92rem;
+        font-weight: 500; border-radius: 8px;
+        margin-bottom: 2px; transition: all 0.15s;
+    }
+    .nav-link-side:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .nav-link-side.active { background: rgba(255,255,255,0.12); color: #ffffff; }
+    .nav-link-side svg { width: 18px; height: 18px; }
+    .sidebar-user { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .user-avatar {
+        width: 36px; height: 36px;
+        background: #ffffff; color: #0a0a0a;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700;
+    }
+    .user-name { font-size: 0.88rem; color: #ffffff; }
+    .user-role { font-size: 0.75rem; color: #a3a3a3; text-transform: capitalize; }
+    .sidebar-user a {
+        display: block; color: #737373;
+        font-size: 0.78rem; text-decoration: none; padding: 6px 0;
+    }
+    .sidebar-user a:hover { color: #ef4444; }
+
+    /* Main */
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        max-width: 1000px;
+    }
+
+    .page-header { margin-bottom: 24px; }
+    .page-header h1 {
+        font-size: 1.6rem; font-weight: 700;
+        letter-spacing: -0.02em; margin: 0 0 4px 0;
+    }
+    .page-header p { color: #737373; font-size: 0.92rem; margin: 0; }
+
+    /* Filter tabs */
+    .filter-tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+    .filter-tab {
+        padding: 7px 14px;
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 20px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: #525252;
+        cursor: pointer;
+        text-transform: capitalize;
+        transition: all 0.15s;
+    }
+
+    .filter-tab:hover {
+        border-color: #0a0a0a;
+        color: #0a0a0a;
+    }
+
+    .filter-tab.active {
+        background: #0a0a0a;
+        color: #ffffff;
+        border-color: #0a0a0a;
+    }
+
+    .filter-count {
+        background: rgba(255,255,255,0.2);
+        padding: 1px 7px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        margin-left: 4px;
+    }
+
+    .filter-tab:not(.active) .filter-count {
+        background: #f0f0f0;
+        color: #525252;
+    }
+
+    /* Post card */
+    .post-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 14px;
+        transition: all 0.2s;
+    }
+
+    .post-card:hover {
+        border-color: #d4d4d4;
+        transform: translateY(-1px);
+    }
+
+    .post-card.hidden { display: none; }
+
+    .post-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+
+    .platform-badge {
+        background: #f5f5f5;
+        color: #0a0a0a;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .draft-title-meta {
+        font-size: 0.78rem;
+        color: #a3a3a3;
+        margin-top: 4px;
+    }
+
+    /* Status badges */
+    .status-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .status-pending_approval { background: #fef3c7; color: #92400e; }
+    .status-approved         { background: #d1fae5; color: #065f46; }
+    .status-rejected         { background: #fee2e2; color: #b91c1c; }
+    .status-request_edit     { background: #fed7aa; color: #c2410c; }
+    .status-scheduled        { background: #dbeafe; color: #1e40af; }
+    .status-published        { background: #ede9fe; color: #6b21a8; }
+
+    .post-body {
+        color: #0a0a0a;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        white-space: pre-wrap;
+        margin-bottom: 8px;
+    }
+
+    .post-hashtags {
+        color: #2563eb;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+    }
+
+    /* Manager remarks */
+    .remarks-box {
+        background: #fef3c7;
+        border-left: 3px solid #f59e0b;
+        padding: 10px 14px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: #78350f;
+        margin-top: 12px;
+    }
+
+    .remarks-box .label {
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        opacity: 0.8;
+    }
+
+    /* Schedule info */
+    .schedule-info {
+        background: #dbeafe;
+        border-left: 3px solid #3b82f6;
+        padding: 10px 14px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: #1e3a8a;
+        margin-top: 12px;
+    }
+
+    .schedule-info .label {
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        opacity: 0.8;
+    }
+
+    /* Schedule form (inline) */
+    .schedule-form {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .schedule-form.hidden { display: none; }
+
+    .schedule-form input[type="datetime-local"] {
+        flex: 1;
+        min-width: 200px;
+        padding: 8px 12px;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        color: #0a0a0a;
+        background: #ffffff;
+    }
+
+    .schedule-form input:focus {
+        outline: none;
+        border-color: #0a0a0a;
+        box-shadow: 0 0 0 3px rgba(10,10,10,0.05);
+    }
+
+    .btn-schedule {
+        background: #2563eb;
+        color: #ffffff;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+        margin-top: 12px;
+    }
+
+    .btn-schedule:hover { background: #1d4ed8; transform: translateY(-1px); }
+
+    .btn-confirm {
+        background: #2563eb;
+        color: #ffffff;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #737373;
+        border: 1px solid #e5e5e5;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    /* Empty */
+    .empty-state {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 80px 20px;
+        text-align: center;
+    }
+
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state h3 {
+        font-size: 1.1rem; font-weight: 600;
+        color: #0a0a0a; margin-bottom: 6px;
+    }
+    .empty-state p { color: #737373; font-size: 0.92rem; margin: 0 0 20px 0; }
+
+    .btn-primary-dark {
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s;
+    }
+
+    .btn-primary-dark:hover {
+        background: #2a2a2a;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #0a0a0a; color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        opacity: 0; transform: translateY(20px);
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #10b981; }
+    .toast.error   { background: #ef4444; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span>SocialAI</div>
+
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"/>
+            </svg>
+            Dashboard
+        </a>
+        <a href="/drafts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/>
+            </svg>
+            Drafts
+        </a>
+        <a href="/posts" class="nav-link-side active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6"/>
+            </svg>
+            Posts
+        </a>
+        {% if user.role in ['manager', 'admin'] %}
+        <a href="/manager" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
+            </svg>
+            Review Queue
+        </a>
+        {% endif %}
+        <a href="/analytics" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6"/>
+            </svg>
+            Analytics
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main-content">
+
+    <div class="page-header">
+        <h1>Posts</h1>
+        <p>All your AI-generated posts across platforms</p>
+    </div>
+
+    {% if posts %}
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">
+            All <span class="filter-count">{{ posts|length }}</span>
+        </button>
+        <button class="filter-tab" data-filter="pending_approval">
+            Pending <span class="filter-count">{{ posts|selectattr('status','equalto','pending_approval')|list|length }}</span>
+        </button>
+        <button class="filter-tab" data-filter="approved">
+            Approved <span class="filter-count">{{ posts|selectattr('status','equalto','approved')|list|length }}</span>
+        </button>
+        <button class="filter-tab" data-filter="rejected">
+            Rejected <span class="filter-count">{{ posts|selectattr('status','equalto','rejected')|list|length }}</span>
+        </button>
+        <button class="filter-tab" data-filter="request_edit">
+            Edit <span class="filter-count">{{ posts|selectattr('status','equalto','request_edit')|list|length }}</span>
+        </button>
+        <button class="filter-tab" data-filter="scheduled">
+            Scheduled <span class="filter-count">{{ posts|selectattr('status','equalto','scheduled')|list|length }}</span>
+        </button>
+        <button class="filter-tab" data-filter="published">
+            Published <span class="filter-count">{{ posts|selectattr('status','equalto','published')|list|length }}</span>
+        </button>
+    </div>
+
+    <!-- Post cards -->
+    <div id="postsList">
+        {% for post in posts %}
+        <div class="post-card" data-status="{{ post.status }}" data-post-id="{{ post.post_id }}">
+
+            <div class="post-card-header">
+                <div>
+                    <span class="platform-badge">{{ post.platform }}</span>
+                    <div class="draft-title-meta">Draft: {{ post.draft_title }}</div>
+                </div>
+                <span class="status-badge status-{{ post.status }}">
+                    {{ post.status.replace('_', ' ') }}
+                </span>
+            </div>
+
+            <div class="post-body">{{ post.repurposed_content }}</div>
+
+            {% if post.hashtags %}
+            <div class="post-hashtags">{{ post.hashtags }}</div>
+            {% endif %}
+
+            <!-- Manager remarks (if any) -->
+            {% if post.latest_remarks and post.status in ['rejected', 'request_edit'] %}
+            <div class="remarks-box">
+                <div class="label">Manager's Feedback</div>
+                {{ post.latest_remarks }}
+            </div>
+            {% endif %}
+
+            <!-- Scheduled info -->
+            {% if post.scheduled_time %}
+            <div class="schedule-info">
+                <div class="label">Scheduled for</div>
+                {{ post.scheduled_time.strftime('%B %d, %Y at %I:%M %p') }}
+            </div>
+            {% endif %}
+
+            <!-- Schedule button (only for approved posts) -->
+            {% if post.status == 'approved' %}
+            <button class="btn-schedule" onclick="openScheduleForm('{{ post.post_id }}')">
+                📅 Schedule This Post
+            </button>
+
+            <div class="schedule-form hidden" id="form-{{ post.post_id }}">
+                <input type="datetime-local"
+                       id="datetime-{{ post.post_id }}"
+                       min="{{ now }}">
+                <button class="btn-confirm" onclick="confirmSchedule('{{ post.post_id }}')">
+                    Confirm
+                </button>
+                <button class="btn-cancel" onclick="closeScheduleForm('{{ post.post_id }}')">
+                    Cancel
+                </button>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="icon">📭</div>
+        <h3>No posts yet</h3>
+        <p>Create your first draft and let AI repurpose it for you.</p>
+        <a href="/drafts/new" class="btn-primary-dark">+ Create your first draft</a>
+    </div>
+    {% endif %}
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── Tab filtering ──────────────────────────────────────
+document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const filter = tab.dataset.filter;
+        document.querySelectorAll('.post-card').forEach(card => {
+            if (filter === 'all' || card.dataset.status === filter) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    });
+});
+
+// ─── Schedule form toggle ───────────────────────────────
+function openScheduleForm(postId) {
+    document.getElementById(`form-${postId}`).classList.remove('hidden');
+
+    // Set default to tomorrow at 9 AM
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(9, 0, 0, 0);
+
+    const input = document.getElementById(`datetime-${postId}`);
+    input.value = tomorrow.toISOString().slice(0, 16);
+}
+
+function closeScheduleForm(postId) {
+    document.getElementById(`form-${postId}`).classList.add('hidden');
+}
+
+// ─── Submit schedule ────────────────────────────────────
+async function confirmSchedule(postId) {
+    const input = document.getElementById(`datetime-${postId}`);
+    const scheduledTime = input.value;
+
+    if (!scheduledTime) {
+        showToast('Please pick a date and time', 'error');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('scheduled_time', scheduledTime);
+
+    try {
+        const res = await fetch(`/api/posts/${postId}/schedule`, {
+            method: 'POST',
+            body:   formData,
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.detail || 'Scheduling failed');
+
+        showToast(data.message, 'success');
+
+        // Reload to show updated status
+        setTimeout(() => location.reload(), 1000);
+
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
+}
+
+// ─── Toast helper ───────────────────────────────────────
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+</script>
+
+{% endblock %}
