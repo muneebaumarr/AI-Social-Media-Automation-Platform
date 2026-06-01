@@ -279,3 +279,48 @@ CREATE TABLE audit_logs (
 CREATE INDEX idx_audit_user_id    ON audit_logs (user_id);
 CREATE INDEX idx_audit_entity     ON audit_logs (entity_name, entity_id);
 CREATE INDEX idx_audit_created_at ON audit_logs (created_at);
+
+-- ─── 1. Add brand identity columns to clients ──────────
+ALTER TABLE clients
+    ADD COLUMN owner_id        CHAR(36)     NULL AFTER client_id,
+    ADD COLUMN industry        VARCHAR(100) NULL,
+    ADD COLUMN brand_voice     TEXT         NULL,
+    ADD COLUMN target_audience TEXT         NULL,
+    ADD COLUMN brand_color     VARCHAR(7)   DEFAULT '#0a0a0a',
+    ADD COLUMN do_not_use      TEXT         NULL,
+    ADD COLUMN invite_code     VARCHAR(8)   NULL;
+
+ALTER TABLE clients
+    ADD CONSTRAINT fk_clients_owner
+    FOREIGN KEY (owner_id) REFERENCES users(user_id)
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE clients
+    ADD UNIQUE INDEX uq_invite_code (invite_code);
+
+-- ─── 2. Create client_members table ────────────────────
+-- This is the multi-tenancy bridge.
+-- Maps which writers/managers belong to which brand.
+CREATE TABLE client_members (
+    membership_id CHAR(36)    NOT NULL DEFAULT (UUID()),
+    client_id     CHAR(36)    NOT NULL,
+    user_id       CHAR(36)    NOT NULL,
+    member_role   ENUM('writer','manager') NOT NULL DEFAULT 'writer',
+    added_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT pk_client_members   PRIMARY KEY (membership_id),
+    CONSTRAINT fk_cm_client        FOREIGN KEY (client_id)
+                                   REFERENCES  clients(client_id)
+                                   ON DELETE CASCADE,
+    CONSTRAINT fk_cm_user          FOREIGN KEY (user_id)
+                                   REFERENCES  users(user_id)
+                                   ON DELETE CASCADE,
+    CONSTRAINT uq_cm_user_client   UNIQUE (client_id, user_id)
+);
+
+CREATE INDEX idx_cm_client ON client_members (client_id);
+CREATE INDEX idx_cm_user   ON client_members (user_id);
+
+-- ─── 3. Verify ────────────────────────────────────────
+DESCRIBE clients;
+DESCRIBE client_members;
