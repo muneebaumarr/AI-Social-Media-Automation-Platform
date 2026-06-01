@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+
+{% block title %}{{ brand.client_name }} — SocialAI{% endblock %}
+
+{% block extra_head %}
+<style>
+    body { background: #fafafa; color: #0a0a0a; font-family: 'Inter', -apple-system, sans-serif; }
+    .sidebar { width: 240px; height: 100vh; background: #0a0a0a; color: #ffffff; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; z-index: 50; }
+    .sidebar-brand { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); font-weight: 700; font-size: 1.05rem; }
+    .sidebar-brand .dot { display: inline-block; width: 8px; height: 8px; background: #ffffff; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; }
+    .nav-link-side { display: flex; align-items: center; gap: 12px; padding: 10px 14px; color: #a3a3a3; text-decoration: none; font-size: 0.92rem; font-weight: 500; border-radius: 8px; margin-bottom: 2px; }
+    .nav-link-side:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .nav-link-side.active { background: rgba(255,255,255,0.12); color: #ffffff; }
+    .sidebar-user { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .user-avatar { width: 36px; height: 36px; background: #ffffff; color: #0a0a0a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .user-name { font-size: 0.88rem; color: #ffffff; }
+    .user-role { font-size: 0.75rem; color: #a3a3a3; text-transform: capitalize; }
+    .sidebar-user a { display: block; color: #737373; font-size: 0.78rem; text-decoration: none; padding: 6px 0; }
+
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        max-width: 900px;
+    }
+
+    .brand-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 32px;
+    }
+
+    .brand-avatar-big {
+        width: 64px; height: 64px;
+        border-radius: 14px;
+        background: #0a0a0a;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.6rem;
+    }
+
+    .brand-header h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 2px 0;
+    }
+
+    .brand-header .meta {
+        color: #737373;
+        font-size: 0.9rem;
+    }
+
+    .invite-code-box {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .invite-code-text { flex: 1; }
+    .invite-code-text .label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #737373;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+    }
+    .invite-code-text p {
+        font-size: 0.85rem;
+        color: #525252;
+        margin: 0;
+    }
+
+    .invite-code {
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+    .invite-code:hover { background: #2a2a2a; }
+
+    .form-panel {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 16px;
+    }
+
+    .form-section-title {
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #737373;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    .form-label {
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: #0a0a0a;
+        margin-bottom: 6px;
+    }
+
+    .form-helper {
+        font-size: 0.78rem;
+        color: #a3a3a3;
+        margin-bottom: 10px;
+    }
+
+    .form-input, .form-textarea {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.92rem;
+        color: #0a0a0a;
+        font-family: inherit;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+        outline: none;
+        border-color: #0a0a0a;
+        box-shadow: 0 0 0 3px rgba(10,10,10,0.05);
+    }
+
+    .form-input:disabled, .form-textarea:disabled {
+        background: #fafafa;
+        cursor: not-allowed;
+    }
+
+    .form-textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+
+    .empty-value {
+        color: #a3a3a3;
+        font-style: italic;
+        padding: 10px 14px;
+        background: #fafafa;
+        border-radius: 8px;
+        font-size: 0.92rem;
+    }
+
+    .members-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .member-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .member-row:last-child { border-bottom: none; }
+
+    .member-info { display: flex; align-items: center; gap: 12px; }
+    .member-avatar {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        background: #f0f0f0;
+        color: #525252;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .member-name { font-size: 0.92rem; font-weight: 500; color: #0a0a0a; }
+    .member-email { font-size: 0.78rem; color: #737373; }
+
+    .role-badge {
+        background: #f5f5f5;
+        color: #525252;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .btn-primary-dark {
+        background: #0a0a0a; color: #ffffff;
+        padding: 10px 20px;
+        font-size: 0.9rem; font-weight: 500;
+        border-radius: 8px;
+        border: none; cursor: pointer;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #0a0a0a; color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        opacity: 0; transform: translateY(20px);
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #10b981; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span>SocialAI</div>
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side">Dashboard</a>
+        <a href="/brands" class="nav-link-side active">Brands</a>
+        <a href="/drafts" class="nav-link-side">Drafts</a>
+        <a href="/posts" class="nav-link-side">Posts</a>
+        {% if user.role in ['manager', 'admin'] %}
+        <a href="/manager" class="nav-link-side">Review Queue</a>
+        {% endif %}
+        <a href="/analytics" class="nav-link-side">Analytics</a>
+    </nav>
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<main class="main-content">
+
+    <div class="brand-header">
+        <div class="brand-avatar-big" id="brandAvatar" data-color="{{ brand.brand_color or '#0a0a0a' }}">{{ brand.client_name[0]|upper }}</div>
+        <div>
+            <h1>{{ brand.client_name }}</h1>
+            <div class="meta">
+                {{ brand.industry or 'No industry set' }} ·
+                You are <strong>{{ brand.access_type }}</strong> here
+            </div>
+        </div>
+    </div>
+
+    {% if can_edit %}
+    <div class="invite-code-box">
+        <div class="invite-code-text">
+            <div class="label">Invite Code</div>
+            <p>Share this code with writers to give them access to this brand</p>
+        </div>
+        <div class="invite-code" onclick="copyCode()" title="Click to copy">
+            {{ brand.invite_code }}
+        </div>
+    </div>
+    {% endif %}
+
+    <form id="brandForm">
+
+        <div class="form-panel">
+            <div class="form-section-title">Brand Identity for AI</div>
+
+            <div class="form-group">
+                <label class="form-label">Industry</label>
+                {% if can_edit %}
+                <input type="text" name="industry" class="form-input"
+                       value="{{ brand.industry or '' }}"
+                       placeholder="e.g. SaaS, Coffee shop, Fashion">
+                {% else %}
+                    {% if brand.industry %}
+                    <div class="empty-value" style="color:#0a0a0a; font-style:normal;">{{ brand.industry }}</div>
+                    {% else %}
+                    <div class="empty-value">Not set</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Brand Voice &amp; Tone</label>
+                <div class="form-helper">How does your brand speak? AI uses this in every post.</div>
+                {% if can_edit %}
+                <textarea name="brand_voice" class="form-textarea" rows="3"
+                          placeholder="e.g. Warm, witty, never corporate.">{{ brand.brand_voice or '' }}</textarea>
+                {% else %}
+                    {% if brand.brand_voice %}
+                    <div class="empty-value" style="color:#0a0a0a; font-style:normal; white-space:pre-wrap;">{{ brand.brand_voice }}</div>
+                    {% else %}
+                    <div class="empty-value">Not set</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Target Audience</label>
+                {% if can_edit %}
+                <textarea name="target_audience" class="form-textarea" rows="2"
+                          placeholder="e.g. Small business owners aged 30-50">{{ brand.target_audience or '' }}</textarea>
+                {% else %}
+                    {% if brand.target_audience %}
+                    <div class="empty-value" style="color:#0a0a0a; font-style:normal; white-space:pre-wrap;">{{ brand.target_audience }}</div>
+                    {% else %}
+                    <div class="empty-value">Not set</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Things to Avoid</label>
+                {% if can_edit %}
+                <textarea name="do_not_use" class="form-textarea" rows="2"
+                          placeholder="e.g. Never use exclamation marks.">{{ brand.do_not_use or '' }}</textarea>
+                {% else %}
+                    {% if brand.do_not_use %}
+                    <div class="empty-value" style="color:#0a0a0a; font-style:normal; white-space:pre-wrap;">{{ brand.do_not_use }}</div>
+                    {% else %}
+                    <div class="empty-value">Not set</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <input type="hidden" name="brand_color" value="{{ brand.brand_color }}">
+
+            {% if can_edit %}
+            <button type="submit" class="btn-primary-dark">Save Changes</button>
+            {% endif %}
+        </div>
+
+    </form>
+
+    <div class="form-panel">
+        <div class="form-section-title">Team Members ({{ members|length }})</div>
+        <ul class="members-list">
+            {% for m in members %}
+            <li class="member-row">
+                <div class="member-info">
+                    <div class="member-avatar">{{ m.full_name[0]|upper }}</div>
+                    <div>
+                        <div class="member-name">{{ m.full_name }}</div>
+                        <div class="member-email">{{ m.email }}</div>
+                    </div>
+                </div>
+                <span class="role-badge">{{ m.member_role }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script id="brand-data" type="application/json">
+{
+    "inviteCode": {{ brand.invite_code | tojson }},
+    "clientId":   {{ brand.client_id  | tojson }},
+    "canEdit":    {{ can_edit | tojson }},
+    "color":      {{ (brand.brand_color or '#0a0a0a') | tojson }}
+}
+</script>
+<script>
+(function () {
+    var d = JSON.parse(document.getElementById('brand-data').textContent);
+
+    // Apply brand color to avatar
+    var avatar = document.getElementById('brandAvatar');
+    if (avatar) avatar.style.background = d.color;
+
+    // Copy invite code
+    window.copyCode = function () {
+        navigator.clipboard.writeText(d.inviteCode);
+        showToast('Invite code copied!');
+    };
+
+    // Save brand form
+    if (d.canEdit) {
+        document.getElementById('brandForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            fetch('/api/brands/' + d.clientId, { method: 'POST', body: new FormData(e.target) })
+                .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+                .then(function (r) {
+                    if (!r.ok) throw new Error(r.data.detail);
+                    showToast('Brand updated successfully', 'success');
+                })
+                .catch(function (err) { showToast(err.message); });
+        });
+    }
+
+    function showToast(message, type) {
+        var toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast show ' + (type || 'success');
+        setTimeout(function () { toast.classList.remove('show'); }, 3000);
+    }
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+
+{% block title %}Brands — SocialAI{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background: #fafafa;
+        color: #0a0a0a;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Sidebar (reused) */
+    .sidebar {
+        width: 240px; height: 100vh;
+        background: #0a0a0a; color: #ffffff;
+        position: fixed; top: 0; left: 0;
+        display: flex; flex-direction: column;
+        z-index: 50;
+    }
+    .sidebar-brand {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-weight: 700; font-size: 1.05rem;
+    }
+    .sidebar-brand .dot {
+        display: inline-block; width: 8px; height: 8px;
+        background: #ffffff; border-radius: 50%;
+        margin-right: 8px; vertical-align: middle;
+    }
+    .sidebar-nav { flex: 1; padding: 16px 12px; }
+    .nav-link-side {
+        display: flex; align-items: center; gap: 12px;
+        padding: 10px 14px; color: #a3a3a3;
+        text-decoration: none; font-size: 0.92rem;
+        font-weight: 500; border-radius: 8px;
+        margin-bottom: 2px; transition: all 0.15s;
+    }
+    .nav-link-side:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .nav-link-side.active { background: rgba(255,255,255,0.12); color: #ffffff; }
+    .nav-link-side svg { width: 18px; height: 18px; }
+    .sidebar-user { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .user-avatar {
+        width: 36px; height: 36px;
+        background: #ffffff; color: #0a0a0a;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700;
+    }
+    .user-name { font-size: 0.88rem; color: #ffffff; }
+    .user-role { font-size: 0.75rem; color: #a3a3a3; text-transform: capitalize; }
+    .sidebar-user a {
+        display: block; color: #737373;
+        font-size: 0.78rem; text-decoration: none; padding: 6px 0;
+    }
+    .sidebar-user a:hover { color: #ef4444; }
+
+    /* Main */
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        max-width: 1100px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+        font-size: 1.6rem; font-weight: 700;
+        letter-spacing: -0.02em; margin: 0 0 4px 0;
+    }
+    .page-header p { color: #737373; font-size: 0.92rem; margin: 0; }
+
+    .btn-primary-dark {
+        background: #0a0a0a; color: #ffffff;
+        padding: 10px 20px;
+        font-size: 0.9rem; font-weight: 500;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer; border: none;
+        transition: all 0.2s;
+    }
+    .btn-primary-dark:hover {
+        background: #2a2a2a; color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    .btn-light {
+        background: transparent; color: #0a0a0a;
+        border: 1px solid #e5e5e5;
+        padding: 10px 20px;
+        font-size: 0.9rem; font-weight: 500;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-light:hover { border-color: #0a0a0a; }
+
+    /* Join code panel */
+    .join-panel {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .join-panel .text { flex: 1; }
+    .join-panel h3 {
+        font-size: 0.95rem; font-weight: 600;
+        margin: 0 0 4px 0;
+    }
+    .join-panel p {
+        color: #737373;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .join-form {
+        display: flex;
+        gap: 8px;
+    }
+
+    .join-form input {
+        background: #fafafa;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 0.9rem;
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        width: 140px;
+        color: #0a0a0a;
+    }
+
+    .join-form input:focus {
+        outline: none;
+        border-color: #0a0a0a;
+        background: #ffffff;
+    }
+
+    /* Brand grid */
+    .brands-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+    }
+
+    .brand-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .brand-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: var(--brand-color, #0a0a0a);
+    }
+
+    .brand-card:hover {
+        border-color: #d4d4d4;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+    }
+
+    .brand-avatar {
+        width: 48px; height: 48px;
+        border-radius: 12px;
+        background: var(--brand-color, #0a0a0a);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 14px;
+    }
+
+    .brand-card h4 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #0a0a0a;
+        margin: 0 0 4px 0;
+    }
+
+    .brand-industry {
+        font-size: 0.82rem;
+        color: #737373;
+        margin-bottom: 16px;
+    }
+
+    .brand-meta {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        font-size: 0.78rem;
+        color: #737373;
+        padding-top: 12px;
+        border-top: 1px solid #f5f5f5;
+    }
+
+    .access-badge {
+        background: #f5f5f5;
+        color: #525252;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .access-badge.owner { background: #ecfdf5; color: #065f46; }
+
+    /* Empty */
+    .empty-state {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 80px 20px;
+        text-align: center;
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state h3 {
+        font-size: 1.1rem; font-weight: 600;
+        color: #0a0a0a; margin-bottom: 6px;
+    }
+    .empty-state p { color: #737373; font-size: 0.92rem; margin: 0 0 20px 0; }
+
+    .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #0a0a0a; color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        opacity: 0; transform: translateY(20px);
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #10b981; }
+    .toast.error   { background: #ef4444; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span>SocialAI</div>
+
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3"/>
+            </svg>
+            Dashboard
+        </a>
+        <a href="/brands" class="nav-link-side active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            Brands
+        </a>
+        <a href="/drafts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/>
+            </svg>
+            Drafts
+        </a>
+        <a href="/posts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592"/>
+            </svg>
+            Posts
+        </a>
+        {% if user.role in ['manager', 'admin'] %}
+        <a href="/manager" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
+            </svg>
+            Review Queue
+        </a>
+        {% endif %}
+        <a href="/analytics" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6"/>
+            </svg>
+            Analytics
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main-content">
+
+    <div class="page-header">
+        <div>
+            <h1>Brands</h1>
+            <p>
+                {% if user.role == 'admin' %}
+                    Manage your brands and the team working on them
+                {% else %}
+                    Brands you have access to
+                {% endif %}
+            </p>
+        </div>
+        {% if user.role == 'admin' %}
+        <a href="/brands/new" class="btn-primary-dark">+ Create Brand</a>
+        {% endif %}
+    </div>
+
+    <!-- Join a brand via invite code -->
+    {% if user.role != 'admin' %}
+    <div class="join-panel">
+        <div class="text">
+            <h3>Have an invite code?</h3>
+            <p>Enter the 6-character code from your admin to join their brand workspace</p>
+        </div>
+        <form class="join-form" id="joinForm">
+            <input type="text" name="invite_code"
+                   placeholder="AMC8X2" maxlength="6"
+                   pattern="[A-Z0-9]{6}" required>
+            <button type="submit" class="btn-primary-dark">Join</button>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if brands %}
+        <div class="brands-grid">
+            {% for brand in brands %}
+            <a href="/brands/{{ brand.client_id }}"
+               class="brand-card"
+               style="--brand-color: {{ brand.brand_color or '#0a0a0a' }};">
+                <div class="brand-avatar">
+                    {{ brand.client_name[0]|upper }}
+                </div>
+                <h4>{{ brand.client_name }}</h4>
+                <div class="brand-industry">
+                    {{ brand.industry or 'No industry set' }}
+                </div>
+                <div class="brand-meta">
+                    <span class="access-badge {{ brand.access_type }}">
+                        {{ brand.access_type }}
+                    </span>
+                    {% if brand.access_type == 'owner' %}
+                    <span>Code: <strong style="color:#0a0a0a;">{{ brand.invite_code }}</strong></span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="icon">🏢</div>
+            <h3>No brands yet</h3>
+            {% if user.role == 'admin' %}
+                <p>Create your first brand and start automating your social content</p>
+                <a href="/brands/new" class="btn-primary-dark">+ Create your first brand</a>
+            {% else %}
+                <p>Ask your admin for an invite code to join a brand workspace</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const joinForm = document.getElementById('joinForm');
+if (joinForm) {
+    joinForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        formData.set('invite_code', formData.get('invite_code').toUpperCase());
+
+        try {
+            const res  = await fetch('/api/brands/join', {
+                method: 'POST',
+                body:   formData,
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.detail || 'Failed to join');
+
+            showToast(data.message, 'success');
+            setTimeout(() => location.reload(), 1200);
+        } catch (err) {
+            showToast(err.message, 'error');
+        }
+    });
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+</script>
+
+{% endblock %}

@@ -368,6 +368,12 @@
             </svg>
             Dashboard
         </a>
+        <a href="/brands" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/>
+            </svg>
+            Brands
+        </a>
         <a href="/drafts" class="nav-link-side">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/>
@@ -529,130 +535,116 @@
 
 <div class="toast" id="toast"></div>
 
+{% endblock %}
+
+{% block extra_scripts %}
+<script id="analytics-data" type="application/json">
+{
+    "hasPosts":  {{ (overview.total_posts > 0) | tojson }},
+    "platforms": {{ platform_stats | tojson }},
+    "statuses":  {{ status_data | tojson }}
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-{% if overview.total_posts > 0 %}
+(function () {
+    var _d        = JSON.parse(document.getElementById('analytics-data').textContent);
+    var hasPosts  = _d.hasPosts;
+    var platforms = _d.platforms;
+    var statuses  = _d.statuses;
 
-// ─── Platform engagement bar chart ──────────────────────
-const platformData = {{ platform_stats | tojson }};
-const platformCtx  = document.getElementById('platformChart');
+    if (hasPosts) {
+        // Platform engagement bar chart
+        new Chart(document.getElementById('platformChart'), {
+            type: 'bar',
+            data: {
+                labels: platforms.map(function(p) {
+                    return p.platform.charAt(0).toUpperCase() + p.platform.slice(1);
+                }),
+                datasets: [{
+                    label: 'Engagement',
+                    data: platforms.map(function(p) { return p.total; }),
+                    backgroundColor: '#0a0a0a',
+                    borderRadius: 6,
+                    maxBarThickness: 60,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(ctx) {
+                                return 'Avg rate: ' + platforms[ctx.dataIndex].avg_rate + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f0f0f0' }, ticks: { color: '#737373', font: { size: 11 } } },
+                    x: { grid: { display: false }, ticks: { color: '#525252', font: { size: 12, weight: '500' } } }
+                }
+            }
+        });
 
-new Chart(platformCtx, {
-    type: 'bar',
-    data: {
-        labels: platformData.map(p => p.platform.charAt(0).toUpperCase() + p.platform.slice(1)),
-        datasets: [{
-            label: 'Engagement',
-            data:  platformData.map(p => p.total),
-            backgroundColor: '#0a0a0a',
-            borderRadius: 6,
-            barThickness: 'flex',
-            maxBarThickness: 60,
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                callbacks: {
-                    afterLabel: function(ctx) {
-                        const p = platformData[ctx.dataIndex];
-                        return `Avg rate: ${p.avg_rate}%`;
+        // Status donut chart
+        var statusColors = {
+            pending_approval: '#fbbf24', approved: '#10b981',
+            rejected: '#ef4444', request_edit: '#f97316',
+            scheduled: '#3b82f6', published: '#8b5cf6'
+        };
+        new Chart(document.getElementById('statusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: statuses.map(function(s) { return s.status.replace(/_/g, ' '); }),
+                datasets: [{
+                    data: statuses.map(function(s) { return s.count; }),
+                    backgroundColor: statuses.map(function(s) { return statusColors[s.status] || '#a3a3a3'; }),
+                    borderWidth: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#525252', font: { size: 11 }, padding: 10, usePointStyle: true, pointStyle: 'circle' }
                     }
                 }
             }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: { color: '#f0f0f0' },
-                ticks: { color: '#737373', font: { size: 11 } }
-            },
-            x: {
-                grid: { display: false },
-                ticks: { color: '#525252', font: { size: 12, weight: '500' } }
-            }
-        }
-    }
-});
-
-// ─── Status donut chart ─────────────────────────────────
-const statusData = {{ status_data | tojson }};
-const statusCtx  = document.getElementById('statusChart');
-
-const statusColors = {
-    'pending_approval': '#fbbf24',
-    'approved':         '#10b981',
-    'rejected':         '#ef4444',
-    'request_edit':     '#f97316',
-    'scheduled':        '#3b82f6',
-    'published':        '#8b5cf6',
-};
-
-new Chart(statusCtx, {
-    type: 'doughnut',
-    data: {
-        labels: statusData.map(s => s.status.replace('_', ' ')),
-        datasets: [{
-            data: statusData.map(s => s.count),
-            backgroundColor: statusData.map(s => statusColors[s.status] || '#a3a3a3'),
-            borderWidth: 0,
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '65%',
-        plugins: {
-            legend: {
-                position: 'right',
-                labels: {
-                    color: '#525252',
-                    font: { size: 11 },
-                    padding: 10,
-                    usePointStyle: true,
-                    pointStyle: 'circle',
-                }
-            }
-        }
-    }
-});
-{% endif %}
-
-// ─── Generate AI recommendation ─────────────────────────
-async function generateRecommendation() {
-    const btn     = document.getElementById('generateBtn');
-    const textEl  = document.getElementById('recText');
-
-    btn.disabled    = true;
-    btn.textContent = '⏳ Thinking...';
-
-    try {
-        const res = await fetch('/api/analytics/generate-recommendation', {
-            method: 'POST',
         });
-        const data = await res.json();
-
-        if (!res.ok) throw new Error(data.error || 'Failed to generate');
-
-        textEl.textContent = data.recommendation_text;
-        showToast('Fresh recommendation generated', 'success');
-
-    } catch (err) {
-        showToast(err.message, 'error');
-    } finally {
-        btn.disabled    = false;
-        btn.textContent = '✨ Generate New Recommendation';
     }
-}
 
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast show ${type}`;
-    setTimeout(() => toast.classList.remove('show'), 3000);
-}
+    window.generateRecommendation = function () {
+        var btn    = document.getElementById('generateBtn');
+        var textEl = document.getElementById('recText');
+        btn.disabled    = true;
+        btn.textContent = '⏳ Thinking...';
+
+        fetch('/api/analytics/generate-recommendation', { method: 'POST' })
+            .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, data: d }; }); })
+            .then(function(r) {
+                if (!r.ok) throw new Error(r.data.error || 'Failed to generate');
+                textEl.textContent = r.data.recommendation_text;
+                showToast('Fresh recommendation generated', 'success');
+            })
+            .catch(function(err) { showToast(err.message, 'error'); })
+            .finally(function() {
+                btn.disabled    = false;
+                btn.textContent = '✨ Generate New Recommendation';
+            });
+    };
+
+    function showToast(message, type) {
+        var toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast show ' + (type || 'success');
+        setTimeout(function() { toast.classList.remove('show'); }, 3000);
+    }
+})();
 </script>
-
 {% endblock %}
