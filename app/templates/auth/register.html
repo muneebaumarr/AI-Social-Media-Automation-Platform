@@ -1,93 +1,138 @@
 {% extends "base.html" %}
 
-{% block title %}Sign up — SocialAI{% endblock %}
+{% block title %}Create account — SocialAI{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            
-            <div class="text-center mb-4">
-                <div class="badge bg-primary fs-4 px-3 py-2 mb-3">AI</div>
-                <h2 class="text-light">Create your account</h2>
-                <p class="text-secondary">Start automating your social media</p>
-            </div>
-            
-            <div class="card bg-dark border-secondary">
-                <div class="card-body p-4">
-                    
-                    <div id="errorBox" class="alert alert-danger d-none"></div>
-                    
-                    <form id="registerForm">
-                        <div class="mb-3">
-                            <label class="form-label text-light">Full Name</label>
-                            <input type="text" name="full_name" 
-                                   class="form-control bg-dark text-light border-secondary" 
-                                   placeholder="John Smith" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label text-light">Email</label>
-                            <input type="email" name="email" 
-                                   class="form-control bg-dark text-light border-secondary" 
-                                   placeholder="you@example.com" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label text-light">Password</label>
-                            <input type="password" name="password" 
-                                   class="form-control bg-dark text-light border-secondary" 
-                                   placeholder="Min. 6 characters" minlength="6" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label text-light">Role</label>
-                            <select name="role" 
-                                    class="form-select bg-dark text-light border-secondary">
-                                <option value="writer">Writer - creates drafts</option>
-                                <option value="manager">Manager - approves posts</option>
-                                <option value="admin">Admin - full access</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100 py-2">
-                            Create account
-                        </button>
-                    </form>
-                    
-                    <p class="text-center text-secondary mt-3 mb-0 small">
-                        Already have an account? 
-                        <a href="/auth/login-page" class="text-primary">Sign in</a>
-                    </p>
-                </div>
-            </div>
-        </div>
+<div class="auth-page">
+
+  <!-- ── Left Panel ───────────────────────────────── -->
+  <div class="auth-left">
+
+    <a href="/" class="auth-left-brand">
+      <span class="auth-left-brand-dot"></span>
+      SocialAI
+    </a>
+
+    <div class="auth-left-body">
+
+      <h2 class="auth-left-headline">
+        Start automating your social media today.
+      </h2>
+
+      <ul class="auth-bullets">
+        <li>AI-powered repurposing across 6 platforms</li>
+        <li>Team approval workflow built in</li>
+        <li>Multi-platform scheduling in seconds</li>
+      </ul>
+
     </div>
+
+    <!-- spacer -->
+    <div></div>
+
+  </div>
+
+  <!-- ── Right Panel ──────────────────────────────── -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+
+      <h1 class="auth-form-title">Create your account</h1>
+      <p class="auth-form-sub">
+        Already have an account?
+        <a href="/auth/login-page">Sign in &rarr;</a>
+      </p>
+
+      <!-- Error box -->
+      <div id="errorBox" class="alert-box alert-error"></div>
+
+      <form id="registerForm" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="regName">Full Name</label>
+          <input
+            id="regName"
+            class="form-input"
+            type="text"
+            name="full_name"
+            placeholder="Alex Johnson"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Email</label>
+          <input
+            id="regEmail"
+            class="form-input"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password</label>
+          <input
+            id="regPassword"
+            class="form-input"
+            type="password"
+            name="password"
+            placeholder="Min. 6 characters"
+            autocomplete="new-password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regRole">Role</label>
+          <select id="regRole" class="form-select" name="role">
+            <option value="writer">Writer — creates drafts</option>
+            <option value="manager">Manager — approves posts</option>
+            <option value="admin">Admin — full access</option>
+          </select>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-black btn-full">
+            Create account &rarr;
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  document.getElementById('registerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const errorBox = document.getElementById('errorBox');
-    errorBox.classList.add('d-none');
-    
+    errorBox.classList.remove('visible');
+
     const formData = new FormData(e.target);
-    
+
     const res = await fetch('/auth/register', {
-        method: 'POST',
-        body: formData
+      method: 'POST',
+      body: formData
     });
-    
+
     const data = await res.json();
-    
+
     if (res.ok) {
-        window.location.href = '/auth/login-page?registered=true';
+      window.location.href = '/auth/login-page?registered=true';
     } else {
-        errorBox.textContent = data.detail || 'Registration failed';
-        errorBox.classList.remove('d-none');
+      errorBox.textContent = data.detail || 'Registration failed. Please try again.';
+      errorBox.classList.add('visible');
     }
-});
+  });
 </script>
 {% endblock %}

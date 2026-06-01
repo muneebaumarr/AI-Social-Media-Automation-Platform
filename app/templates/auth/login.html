@@ -3,82 +3,124 @@
 {% block title %}Sign in — SocialAI{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            
-            <div class="text-center mb-4">
-                <div class="badge bg-primary fs-4 px-3 py-2 mb-3">AI</div>
-                <h2 class="text-light">Welcome back</h2>
-                <p class="text-secondary">Sign in to your account</p>
-            </div>
-            
-            <div class="card bg-dark border-secondary">
-                <div class="card-body p-4">
-                    
-                    <div id="successBox" class="alert alert-success d-none">
-                        Account created successfully. Please sign in.
-                    </div>
-                    <div id="errorBox" class="alert alert-danger d-none"></div>
-                    
-                    <form id="loginForm">
-                        <div class="mb-3">
-                            <label class="form-label text-light">Email</label>
-                            <input type="email" name="email" 
-                                   class="form-control bg-dark text-light border-secondary" 
-                                   placeholder="you@example.com" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label text-light">Password</label>
-                            <input type="password" name="password" 
-                                   class="form-control bg-dark text-light border-secondary" 
-                                   placeholder="••••••••" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100 py-2">
-                            Sign in
-                        </button>
-                    </form>
-                    
-                    <p class="text-center text-secondary mt-3 mb-0 small">
-                        No account? 
-                        <a href="/auth/register-page" class="text-primary">Create one</a>
-                    </p>
-                </div>
-            </div>
-        </div>
+<div class="auth-page">
+
+  <!-- ── Left Panel ───────────────────────────────── -->
+  <div class="auth-left">
+
+    <a href="/" class="auth-left-brand">
+      <span class="auth-left-brand-dot"></span>
+      SocialAI
+    </a>
+
+    <div class="auth-left-body">
+
+      <h2 class="auth-left-headline">
+        Welcome back. Your content pipeline is waiting.
+      </h2>
+
+      <div class="auth-testimonial">
+        <blockquote>
+          &ldquo;SocialAI cut our content production time from 8 hours to 30 minutes. I don&rsquo;t know how we managed without it.&rdquo;
+        </blockquote>
+        <cite>&mdash; Alex M., Agency Owner</cite>
+      </div>
+
     </div>
+
+    <!-- spacer to push brand to top and body to center -->
+    <div></div>
+
+  </div>
+
+  <!-- ── Right Panel ──────────────────────────────── -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+
+      <h1 class="auth-form-title">Sign in</h1>
+      <p class="auth-form-sub">
+        Don&rsquo;t have an account?
+        <a href="/auth/register-page">Create one free &rarr;</a>
+      </p>
+
+      <!-- Success box (shown after registration redirect) -->
+      <div id="successBox" class="alert-box alert-success">
+        Account created successfully. Please sign in.
+      </div>
+
+      <!-- Error box -->
+      <div id="errorBox" class="alert-box alert-error"></div>
+
+      <form id="loginForm" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email</label>
+          <input
+            id="loginEmail"
+            class="form-input"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input
+            id="loginPassword"
+            class="form-input"
+            type="password"
+            name="password"
+            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-black btn-full">
+            Sign in &rarr;
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-// Show success message if redirected from register
-if (window.location.search.includes('registered=true')) {
-    document.getElementById('successBox').classList.remove('d-none');
-}
+  // Show success message if redirected from registration
+  if (window.location.search.includes('registered=true')) {
+    document.getElementById('successBox').classList.add('visible');
+  }
 
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const errorBox = document.getElementById('errorBox');
-    errorBox.classList.add('d-none');
-    
+    errorBox.classList.remove('visible');
+
     const formData = new FormData(e.target);
-    
+
     const res = await fetch('/auth/login', {
-        method: 'POST',
-        body: formData
+      method: 'POST',
+      body: formData
     });
-    
+
     const data = await res.json();
-    
+
     if (res.ok) {
-        window.location.href = '/dashboard';
+      window.location.href = '/dashboard';
     } else {
-        errorBox.textContent = data.detail || 'Login failed';
-        errorBox.classList.remove('d-none');
+      errorBox.textContent = data.detail || 'Login failed. Please check your credentials.';
+      errorBox.classList.add('visible');
     }
-});
+  });
 </script>
 {% endblock %}

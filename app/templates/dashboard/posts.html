@@ -462,7 +462,7 @@
             {% if post.scheduled_time %}
             <div class="schedule-info">
                 <div class="label">Scheduled for</div>
-                {{ post.scheduled_time.strftime('%B %d, %Y at %I:%M %p') }}
+                {{ (post.scheduled_time | string)[:16] | replace('T', ' at ') }}
             </div>
             {% endif %}
 

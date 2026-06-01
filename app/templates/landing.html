@@ -1,217 +1,338 @@
 {% extends "base.html" %}
 
-{% block title %}SocialAI | Create Once, Publish Everywhere{% endblock %}
-
-{% block extra_head %}
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-{% endblock %}
+{% block title %}SocialAI — Stop writing 6 posts. Write one.{% endblock %}
 
 {% block content %}
 
-<!-- ═══ NAV ═══════════════════════════════════════════════ -->
-<nav class="nav-minimal">
-    <div class="container py-3 d-flex align-items-center justify-content-between">
-        <a href="/" class="brand-mark">
-            <span class="dot"></span>SocialAI
-        </a>
-        <div class="d-flex align-items-center">
-            <a href="#features" class="nav-link-minimal d-none d-md-inline">Features</a>
-            <a href="#workflow" class="nav-link-minimal d-none d-md-inline">How it works</a>
-            <a href="/auth/login-page" class="nav-link-minimal">Sign in</a>
-            <a href="/auth/register-page" class="btn-dark-minimal">Get started →</a>
-        </div>
+<!-- ════════════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+
+      <a href="/" class="brand">
+        <span class="brand-dot"></span>
+        SocialAI
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How it works</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="/auth/login-page" class="nav-signin">Sign in</a>
+        <a href="/auth/register-page" class="btn btn-black">Start free &rarr;</a>
+      </div>
+
     </div>
+  </div>
 </nav>
 
-<!-- ═══ HERO ══════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════ -->
 <section class="hero">
-    <div class="container">
-        <div class="hero-pill">
-            <span class="pulse"></span>
-            <span>Save 10+ hours every week</span>
-        </div>
 
-        <h1>
-            Write once.<br>
-            <span class="accent">Post everywhere.</span>
-        </h1>
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
 
-        <p class="hero-desc">
-            Stop wasting hours rewriting the same post for every platform.
-            Write your idea once and our AI transforms it into perfect posts for
-            Instagram, LinkedIn, Twitter and more, while your team reviews and
-            schedules everything in one place.
-        </p>
+  <div class="container">
 
-        <div class="hero-cta">
-            <a href="/auth/register-page" class="btn-dark-minimal btn-hero">Get Started →</a>
-            <a href="#workflow" class="btn-light-minimal btn-hero">Learn More</a>
-        </div>
-
-        <div class="hero-meta">
-            <div class="hero-meta-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-                </svg>
-                No credit card required
-            </div>
-            <div class="hero-meta-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-                </svg>
-                6 platforms supported
-            </div>
-            <div class="hero-meta-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-                </svg>
-                Free forever plan
-            </div>
-        </div>
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Save 10+ hours every week
     </div>
+
+    <h1>
+      Create Once.<br>
+      <span>Publish Everywhere.</span>
+    </h1>
+
+    <p class="hero-desc">
+      Your ideas deserve to be seen on every platform, not rewritten six times by hand.
+      SocialAI turns one draft into platform-native posts for Instagram, LinkedIn,
+      Twitter and Facebook in seconds. Your team reviews, approves and schedules.
+      You grow.
+    </p>
+
+    <div class="hero-cta">
+      <a href="/auth/register-page" class="btn btn-black-lg">Start free today &rarr;</a>
+      <a href="#how-it-works" class="btn btn-ghost">See how it works</a>
+    </div>
+
+    <p class="hero-trust">10,000+ posts generated &nbsp;&middot;&nbsp; 6 platforms &nbsp;&middot;&nbsp; Built for agencies</p>
+
+  </div>
 </section>
 
-<!-- ═══ FEATURES ══════════════════════════════════════════ -->
-<section class="section" id="features">
-    <div class="container">
-        <h2 class="section-title">Powerful Features</h2>
-        <p class="section-sub">Everything you need to manage social media</p>
 
-        <div class="feature-grid">
+<!-- ════════════════════════════════════════════════════
+     FEATURES
+════════════════════════════════════════════════════ -->
+<section class="section" id="features" style="background: #fafafa; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0;">
+  <div class="container">
 
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h5>AI Content Repurposing</h5>
-                    <p>Automatically repurpose one draft into platform-specific content</p>
-                </div>
-            </div>
+    <span class="section-label">Features</span>
+    <h2 class="section-title">Everything your content team needs</h2>
+    <p class="section-sub">One platform to create, review, schedule and analyse all your social content.</p>
 
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h5>Approval Workflow</h5>
-                    <p>Managers review and approve content before publishing</p>
-                </div>
-            </div>
+    <div class="feature-grid">
 
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h5>Smart Scheduling</h5>
-                    <p>Schedule posts across multiple platforms with one click</p>
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h5>Analytics Dashboard</h5>
-                    <p>Track engagement metrics and get AI-powered insights</p>
-                </div>
-            </div>
-
+      <!-- 1 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h7"/>
+            <circle cx="19" cy="18" r="3"/>
+            <path d="M19 15v3l2 1"/>
+          </svg>
         </div>
+        <h4>Write once, publish everywhere</h4>
+        <p>One brief becomes native posts for every platform. No rewriting. No reformatting. Our AI handles tone, length and hashtags for each channel automatically.</p>
+      </div>
+
+      <!-- 2 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 12l2 2 4-4"/>
+            <path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z"/>
+          </svg>
+        </div>
+        <h4>Approval workflow built in</h4>
+        <p>Every post reviewed before it goes live. Managers approve, reject, or request edits in seconds &mdash; right inside SocialAI, no email chains needed.</p>
+      </div>
+
+      <!-- 3 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <h4>Smart post scheduling</h4>
+        <p>Approved posts drop straight into your queue. Pick a time, hit schedule. Done. SocialAI keeps your calendar full without the manual effort.</p>
+      </div>
+
+      <!-- 4 -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <h4>AI performance insights</h4>
+        <p>See what&rsquo;s landing and what&rsquo;s flopping. Our AI reads your analytics and tells you exactly what to post next week &mdash; no guesswork, just data.</p>
+      </div>
+
     </div>
+  </div>
 </section>
 
-<!-- ═══ HOW IT WORKS ══════════════════════════════════════ -->
-<section class="section" id="workflow">
-    <div class="container">
-        <h2 class="section-title">How It Works</h2>
-        <p class="section-sub">From idea to published in 4 simple steps</p>
 
-        <div class="timeline">
+<!-- ════════════════════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════════════════ -->
+<section class="section" id="how-it-works">
+  <div class="container">
 
-            <div class="timeline-item">
-                <div class="timeline-left">
-                    <div class="timeline-number">1</div>
-                    <div class="timeline-line"></div>
-                </div>
-                <div class="timeline-content">
-                    <h4>Write Original Content</h4>
-                    <p>Create a single draft with your core message.</p>
-                </div>
-            </div>
+    <span class="section-label">Process</span>
+    <h2 class="section-title">From idea to published in 4 steps</h2>
+    <p class="section-sub">No complexity. No learning curve. Just a straight line from brief to published.</p>
 
-            <div class="timeline-item">
-                <div class="timeline-left">
-                    <div class="timeline-number">2</div>
-                    <div class="timeline-line"></div>
-                </div>
-                <div class="timeline-content">
-                    <h4>AI Repurposing</h4>
-                    <p>Automatically generate platform-specific versions.</p>
-                </div>
-            </div>
+    <div class="steps-grid">
 
-            <div class="timeline-item">
-                <div class="timeline-left">
-                    <div class="timeline-number">3</div>
-                    <div class="timeline-line"></div>
-                </div>
-                <div class="timeline-content">
-                    <h4>Manager Review</h4>
-                    <p>Get approval before publishing to ensure quality.</p>
-                </div>
-            </div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Write your brief</h4>
+        <p>One paragraph. That&rsquo;s all you need. Describe your message, your brand, your audience. SocialAI does the rest.</p>
+      </div>
 
-            <div class="timeline-item">
-                <div class="timeline-left">
-                    <div class="timeline-number">4</div>
-                    <div class="timeline-line"></div>
-                </div>
-                <div class="timeline-content">
-                    <h4>Schedule &amp; Publish</h4>
-                    <p>Schedule posts and track performance analytics.</p>
-                </div>
-            </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>AI writes for every platform</h4>
+        <p>Gemini generates a native version for each platform you select &mdash; tone, format, length, hashtags &mdash; all dialled in.</p>
+      </div>
 
-            <div class="timeline-item">
-                <div class="timeline-left">
-                    <div class="timeline-number">5</div>
-                    <div class="timeline-line"></div>
-                </div>
-                <div class="timeline-content">
-                    <h4>AI Agent Recommendations</h4>
-                    <p>Our AI agent analyzes your content performance and gives actionable recommendations to improve reach and engagement.</p>
-                </div>
-            </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Your manager reviews</h4>
+        <p>Posts route to your approval queue instantly. One click to approve, reject, or request edits. No bottlenecks.</p>
+      </div>
 
-        </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Schedule and go live</h4>
+        <p>Pick your publish time. We handle the queue. You see the results in your analytics dashboard immediately after.</p>
+      </div>
+
     </div>
+  </div>
 </section>
 
-<!-- ═══ CTA ═══════════════════════════════════════════════ -->
-<div class="container">
-    <div class="cta-section">
-        <h2>Ready to get your time back?</h2>
-        <p>Join creators saving 10+ hours every week.</p>
-        <a href="/auth/register-page" class="btn-cta">Start free today →</a>
-    </div>
-</div>
 
-<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════
+     STATS BAND
+════════════════════════════════════════════════════ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="stats-band">
+      <div class="stats-grid">
+
+        <div>
+          <div class="stat-value">10,000+</div>
+          <div class="stat-label">Posts generated</div>
+        </div>
+
+        <div>
+          <div class="stat-value">6</div>
+          <div class="stat-label">Platforms supported</div>
+        </div>
+
+        <div>
+          <div class="stat-value">500hrs+</div>
+          <div class="stat-label">Saved per month</div>
+        </div>
+
+        <div>
+          <div class="stat-value">&lt;&nbsp;30s</div>
+          <div class="stat-label">Time to repurpose</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════
+     CTA
+════════════════════════════════════════════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-card">
+
+      <h2>Your competition is posting daily.<br>Are you?</h2>
+      <p>Join teams who stopped grinding and started growing. SocialAI handles the content &mdash; you focus on the strategy.</p>
+
+      <a href="/auth/register-page" class="btn btn-black-lg">Get started free &rarr;</a>
+
+      <p class="cta-footnote">No credit card &nbsp;&middot;&nbsp; Cancel anytime &nbsp;&middot;&nbsp; Free forever plan</p>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════ -->
 <footer class="footer">
-    <div class="container">
-        © 2026 SocialAI. Built with FastAPI, MySQL and Gemini.
-    </div>
+  <div class="container">
+    &copy; 2026 SocialAI &nbsp;&middot;&nbsp; Built with FastAPI and Gemini AI
+  </div>
 </footer>
 
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function () {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx    = canvas.getContext('2d');
+  const COLORS = ['#0a0a0a','#0a0a0a','#525252','#a3a3a3','#525252'];
+  const COUNT  = 38;
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function make() {
+    return {
+      x:       rand(0, canvas.width),
+      y:       rand(0, canvas.height),
+      r:       rand(1.5, 4),          // current radius
+      maxR:    rand(1.5, 4),          // starting radius
+      color:   COLORS[Math.floor(Math.random() * COLORS.length)],
+      alpha:   rand(0.3, 0.7),
+      phase:   'shrink',              // shrink → pop → wait
+      popR:    0,
+      popAlpha:0,
+      waitLeft:rand(0.4, 2.5) * 60,  // frames to wait before restarting
+      speed:   rand(0.018, 0.045),    // shrink speed (fraction of maxR per frame)
+    };
+  }
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+
+  let dots = [];
+  function init() { resize(); dots = Array.from({length: COUNT}, make); }
+
+  function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    dots.forEach(d => {
+      if (d.phase === 'wait') {
+        d.waitLeft--;
+        if (d.waitLeft <= 0) {
+          // respawn at new random position
+          Object.assign(d, make());
+          d.phase = 'shrink';
+        }
+        return;
+      }
+
+      if (d.phase === 'shrink') {
+        d.r -= d.maxR * d.speed;
+        const t = d.r / d.maxR;           // 1 → 0
+        ctx.save();
+        ctx.globalAlpha = d.alpha * t;
+        ctx.fillStyle   = d.color;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, Math.max(d.r, 0.1), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        if (d.r <= 0.15) {
+          d.phase    = 'pop';
+          d.popR     = d.maxR * 0.15;
+          d.popAlpha = 0.55;
+        }
+        return;
+      }
+
+      if (d.phase === 'pop') {
+        d.popR     += d.maxR * 0.28;    // quick outward burst
+        d.popAlpha -= 0.09;
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, d.popAlpha);
+        ctx.strokeStyle = d.color;
+        ctx.lineWidth   = 0.8;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.popR, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        if (d.popAlpha <= 0) {
+          d.phase    = 'wait';
+          d.waitLeft = rand(0.4, 2.5) * 60;
+        }
+      }
+    });
+
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', resize);
+  init();
+  tick();
+})();
+</script>
 {% endblock %}

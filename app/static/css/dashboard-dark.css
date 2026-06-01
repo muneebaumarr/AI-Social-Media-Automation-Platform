@@ -1,0 +1,251 @@
+/* ============================================================
+   SOCIALAI — Dashboard Dark Theme
+   Loaded after template inline styles so it takes precedence.
+   ============================================================ */
+
+/* ── Body & Layout ───────────────────────────────────────── */
+body {
+  background: #0a0a0a !important;
+  color: #f5f5f5 !important;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.sidebar {
+  background: #050505 !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+.sidebar-brand .dot {
+  background: #ffffff !important;
+}
+
+.sidebar-user a:hover { color: #ef4444 !important; }
+
+/* ── Main content text ───────────────────────────────────── */
+.page-header h1,
+.panel-title,
+.draft-title,
+.stat-value,
+.post-card-header,
+.draft-card .draft-title,
+h1, h2, h3, h4 {
+  color: #f5f5f5 !important;
+}
+
+.page-header p,
+.stat-label,
+.draft-meta,
+.form-helper,
+.subtitle {
+  color: #a3a3a3 !important;
+}
+
+/* ── Cards & Panels ──────────────────────────────────────── */
+.stat-card,
+.panel,
+.post-card,
+.post-result,
+.draft-card,
+.form-panel,
+.chart-panel,
+.top-posts,
+.ai-rec-card,
+.empty-state,
+.top-post-row {
+  background: #141414 !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+
+.stat-card:hover,
+.post-card:hover,
+.draft-card:hover {
+  border-color: rgba(255,255,255,0.18) !important;
+  background: #1a1a1a !important;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-primary-dark {
+  background: #ffffff !important;
+  color: #0a0a0a !important;
+  box-shadow: none !important;
+}
+
+.btn-primary-dark:hover {
+  background: #e5e5e5 !important;
+  color: #0a0a0a !important;
+  box-shadow: none !important;
+}
+
+/* ── Icons & small elements ──────────────────────────────── */
+.stat-icon {
+  background: #1e1e1e !important;
+}
+
+.stat-icon svg { color: #f5f5f5 !important; stroke: #f5f5f5 !important; }
+
+.draft-icon {
+  background: #1e1e1e !important;
+}
+
+/* ── Workflow pills ──────────────────────────────────────── */
+.workflow-pill.todo {
+  background: #1a1a1a !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #a3a3a3 !important;
+}
+
+.workflow-pill .num {
+  background: #2a2a2a !important;
+}
+
+.workflow-arrow { color: #3a3a3a !important; }
+
+/* ── Draft rows ──────────────────────────────────────────── */
+.draft-row {
+  border-bottom-color: rgba(255,255,255,0.06) !important;
+}
+
+/* ── Status badges (dark variants) ──────────────────────── */
+.status-draft       { background: #1e1e1e !important; color: #737373 !important; }
+.status-repurposed  { background: #0d2318 !important; color: #10b981 !important; }
+.status-submitted   { background: #1a1400 !important; color: #f59e0b !important; }
+.status-archived    { background: #1e1e1e !important; color: #525252 !important; }
+.status-pending_approval { background: #1a1400 !important; color: #f59e0b !important; }
+.status-approved    { background: #0d2318 !important; color: #10b981 !important; }
+.status-rejected    { background: #1a0808 !important; color: #ef4444 !important; }
+.status-request_edit{ background: #1a0e00 !important; color: #f97316 !important; }
+.status-scheduled   { background: #08101a !important; color: #60a5fa !important; }
+.status-published   { background: #130d1a !important; color: #a78bfa !important; }
+
+/* ── Post content text ───────────────────────────────────── */
+.post-body,
+.post-content,
+.post-result .post-content,
+[class*="post-"] {
+  color: #f5f5f5 !important;
+}
+
+.post-hashtags { color: #60a5fa !important; }
+
+.platform-badge,
+.platform-mini {
+  background: #1e1e1e !important;
+  color: #f5f5f5 !important;
+}
+
+.post-count-badge {
+  background: #1e1e1e !important;
+  color: #a3a3a3 !important;
+}
+
+/* ── Forms & Inputs ──────────────────────────────────────── */
+.form-input,
+.form-textarea,
+.form-select,
+.remarks-input {
+  background: #1e1e1e !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #f5f5f5 !important;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder,
+.remarks-input::placeholder { color: #525252 !important; }
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus,
+.remarks-input:focus {
+  border-color: rgba(255,255,255,0.35) !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.05) !important;
+}
+
+.form-label { color: #f5f5f5 !important; }
+
+.platform-card {
+  background: #1a1a1a !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #a3a3a3 !important;
+}
+
+.platform-card.selected {
+  background: #ffffff !important;
+  color: #0a0a0a !important;
+  border-color: #ffffff !important;
+}
+
+/* ── Filter tabs ─────────────────────────────────────────── */
+.filter-tab {
+  background: #141414 !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #a3a3a3 !important;
+}
+
+.filter-tab:hover  { border-color: rgba(255,255,255,0.3) !important; color: #f5f5f5 !important; }
+.filter-tab.active { background: #ffffff !important; color: #0a0a0a !important; border-color: #ffffff !important; }
+
+/* ── Analytics charts ────────────────────────────────────── */
+.stats-grid .stat-card .sub { color: #10b981 !important; }
+
+/* ── Remarks & schedule info boxes ──────────────────────── */
+.remarks-box {
+  background: #1a1400 !important;
+  border-left-color: #f59e0b !important;
+  color: #f59e0b !important;
+}
+
+.schedule-info {
+  background: #08101a !important;
+  border-left-color: #3b82f6 !important;
+  color: #60a5fa !important;
+}
+
+/* ── Manager approval buttons ────────────────────────────── */
+.btn-approve { background: #059669 !important; }
+.btn-edit    { background: #d97706 !important; }
+.btn-reject  { background: #dc2626 !important; }
+
+/* ── Empty state ─────────────────────────────────────────── */
+.empty-state h3 { color: #f5f5f5 !important; }
+.empty-state p  { color: #a3a3a3 !important; }
+
+/* ── Top posts table ─────────────────────────────────────── */
+.top-post-row { border-bottom-color: rgba(255,255,255,0.06) !important; }
+.rank         { color: #525252 !important; }
+.post-preview { color: #a3a3a3 !important; }
+.metric-cell .num   { color: #f5f5f5 !important; }
+.metric-cell .label { color: #525252 !important; }
+.engagement-badge { background: #0d2318 !important; color: #10b981 !important; }
+
+/* ── AI recommendation card ──────────────────────────────── */
+.ai-rec-card {
+  background: linear-gradient(135deg, #141414 0%, #1a1a2a 100%) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.ai-rec-text { color: #a3a3a3 !important; }
+.ai-rec-meta { color: #525252 !important; }
+
+.btn-rec-generate {
+  background: #ffffff !important;
+  color: #0a0a0a !important;
+}
+
+/* ── Toast ───────────────────────────────────────────────── */
+.toast { background: #1e1e1e !important; color: #f5f5f5 !important; }
+.toast.success { background: #0d2318 !important; color: #10b981 !important; }
+.toast.error   { background: #1a0808 !important; color: #ef4444 !important; }
+
+/* ── Alert boxes ─────────────────────────────────────────── */
+.alert-error {
+  background: #1a0808 !important;
+  border-color: rgba(239,68,68,0.25) !important;
+  color: #ef4444 !important;
+}
+
+/* ── Schedule form ───────────────────────────────────────── */
+.schedule-form input[type="datetime-local"] {
+  background: #1e1e1e !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #f5f5f5 !important;
+}

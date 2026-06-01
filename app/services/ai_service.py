@@ -181,3 +181,57 @@ Return a JSON object with exactly these three fields:
 
 def repurpose_for_platforms(draft_title: str, draft_content: str, platforms: list) -> list:
     return [repurpose_for_platform(draft_title, draft_content, p) for p in platforms]
+
+
+def generate_weekly_recommendation(platform_stats: list[dict],
+                                   total_posts: int) -> dict:
+    """
+    Asks Gemini to recommend what to post next week based on analytics.
+    Returns {best_platform, recommendation_text}.
+    """
+    if not platform_stats or total_posts == 0:
+        return {
+            "best_platform":       "instagram",
+            "recommendation_text": "Start by creating your first few posts. "
+                                   "Once you have engagement data, we'll "
+                                   "give you personalized recommendations.",
+        }
+
+    # Build a data summary for Gemini
+    summary_lines = []
+    for p in platform_stats:
+        summary_lines.append(
+            f"- {p['platform'].title()}: {p['post_count']} posts, "
+            f"{p['avg_rate']}% avg engagement, "
+            f"{p['likes']} likes, {p['comments']} comments"
+        )
+    summary = "\n".join(summary_lines)
+
+    # Find best platform from the data
+    best_platform = max(platform_stats, key=lambda x: x["avg_rate"])["platform"]
+
+    prompt = f"""You are a social media strategist analyzing weekly analytics.
+
+WEEKLY DATA:
+{summary}
+
+Based on this data, write 2-3 specific actionable recommendations for next week. Be concrete:
+- Which platform to focus on
+- What type of content performs best there
+- Optimal posting frequency
+
+Keep it under 80 words. Direct, data-driven tone. No fluff."""
+
+    try:
+        response   = model.generate_content(prompt)
+        rec_text   = response.text.strip()
+    except Exception as e:
+        print(f"[AI ERROR] Weekly recommendation: {e}")
+        rec_text = (f"Focus on {best_platform.title()} next week — "
+                    f"it's your highest-engagement platform. "
+                    f"Aim for 3-4 quality posts.")
+
+    return {
+        "best_platform":       best_platform,
+        "recommendation_text": rec_text,
+    }

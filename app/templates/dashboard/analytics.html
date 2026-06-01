@@ -1,0 +1,658 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics — SocialAI{% endblock %}
+
+{% block extra_head %}
+<!-- Chart.js for the charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+    body {
+        background: #fafafa;
+        color: #0a0a0a;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Sidebar (reused) */
+    .sidebar {
+        width: 240px; height: 100vh;
+        background: #0a0a0a; color: #ffffff;
+        position: fixed; top: 0; left: 0;
+        display: flex; flex-direction: column;
+        z-index: 50;
+    }
+    .sidebar-brand {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-weight: 700; font-size: 1.05rem;
+    }
+    .sidebar-brand .dot {
+        display: inline-block; width: 8px; height: 8px;
+        background: #ffffff; border-radius: 50%;
+        margin-right: 8px; vertical-align: middle;
+    }
+    .sidebar-nav { flex: 1; padding: 16px 12px; }
+    .nav-link-side {
+        display: flex; align-items: center; gap: 12px;
+        padding: 10px 14px; color: #a3a3a3;
+        text-decoration: none; font-size: 0.92rem;
+        font-weight: 500; border-radius: 8px;
+        margin-bottom: 2px; transition: all 0.15s;
+    }
+    .nav-link-side:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .nav-link-side.active { background: rgba(255,255,255,0.12); color: #ffffff; }
+    .nav-link-side svg { width: 18px; height: 18px; }
+    .sidebar-user { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .user-avatar {
+        width: 36px; height: 36px;
+        background: #ffffff; color: #0a0a0a;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700;
+    }
+    .user-name { font-size: 0.88rem; color: #ffffff; }
+    .user-role { font-size: 0.75rem; color: #a3a3a3; text-transform: capitalize; }
+    .sidebar-user a {
+        display: block; color: #737373;
+        font-size: 0.78rem; text-decoration: none; padding: 6px 0;
+    }
+    .sidebar-user a:hover { color: #ef4444; }
+
+    /* Main */
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        max-width: 1200px;
+    }
+
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 {
+        font-size: 1.6rem; font-weight: 700;
+        letter-spacing: -0.02em; margin: 0 0 4px 0;
+    }
+    .page-header p { color: #737373; font-size: 0.92rem; margin: 0; }
+
+    /* Stats grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        padding: 20px 22px;
+        border-radius: 14px;
+        transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+        border-color: #d4d4d4;
+        transform: translateY(-2px);
+    }
+
+    .stat-card .label {
+        font-size: 0.8rem;
+        color: #737373;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+        font-size: 1.9rem;
+        font-weight: 700;
+        color: #0a0a0a;
+        letter-spacing: -0.02em;
+        line-height: 1;
+    }
+
+    .stat-card .sub {
+        font-size: 0.75rem;
+        color: #10b981;
+        font-weight: 500;
+        margin-top: 6px;
+    }
+
+    /* Chart panels */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+        .charts-grid { grid-template-columns: 1fr; }
+    }
+
+    .chart-panel {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 24px;
+    }
+
+    .chart-panel h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+    }
+
+    .chart-panel .subtitle {
+        font-size: 0.82rem;
+        color: #737373;
+        margin: 0 0 20px 0;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 280px;
+    }
+
+    /* AI recommendation card */
+    .ai-rec-card {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        color: #ffffff;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .ai-rec-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .ai-rec-badge {
+        background: rgba(255,255,255,0.1);
+        color: #ffffff;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .ai-rec-header h3 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .ai-rec-text {
+        font-size: 0.92rem;
+        line-height: 1.6;
+        color: #d4d4d4;
+        margin-bottom: 14px;
+    }
+
+    .ai-rec-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .btn-rec-generate {
+        background: #ffffff;
+        color: #0a0a0a;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-rec-generate:hover:not(:disabled) {
+        transform: translateY(-1px);
+    }
+
+    .btn-rec-generate:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .ai-rec-meta {
+        font-size: 0.75rem;
+        color: #737373;
+    }
+
+    /* Top posts table */
+    .top-posts {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 24px;
+    }
+
+    .top-posts h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+    }
+
+    .top-posts .subtitle {
+        font-size: 0.82rem;
+        color: #737373;
+        margin: 0 0 20px 0;
+    }
+
+    .top-post-row {
+        display: grid;
+        grid-template-columns: 30px 100px 1fr 80px 80px;
+        gap: 14px;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .top-post-row:last-child { border-bottom: none; }
+
+    .rank {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #a3a3a3;
+    }
+
+    .platform-mini {
+        background: #f5f5f5;
+        color: #0a0a0a;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: capitalize;
+        text-align: center;
+    }
+
+    .post-preview {
+        font-size: 0.85rem;
+        color: #525252;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .metric-cell {
+        text-align: right;
+    }
+
+    .metric-cell .num {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #0a0a0a;
+    }
+
+    .metric-cell .label {
+        font-size: 0.7rem;
+        color: #a3a3a3;
+        text-transform: uppercase;
+    }
+
+    .engagement-badge {
+        background: #ecfdf5;
+        color: #065f46;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    /* Empty state */
+    .empty-state {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state h3 {
+        font-size: 1.1rem; font-weight: 600;
+        color: #0a0a0a; margin-bottom: 6px;
+    }
+    .empty-state p { color: #737373; font-size: 0.92rem; margin: 0 0 16px 0; }
+
+    .btn-primary-dark {
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s;
+    }
+
+    .btn-primary-dark:hover {
+        background: #2a2a2a;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #0a0a0a; color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        opacity: 0; transform: translateY(20px);
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #10b981; }
+    .toast.error   { background: #ef4444; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span>SocialAI</div>
+
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3"/>
+            </svg>
+            Dashboard
+        </a>
+        <a href="/drafts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/>
+            </svg>
+            Drafts
+        </a>
+        <a href="/posts" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6"/>
+            </svg>
+            Posts
+        </a>
+        {% if user.role in ['manager', 'admin'] %}
+        <a href="/manager" class="nav-link-side">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
+            </svg>
+            Review Queue
+        </a>
+        {% endif %}
+        <a href="/analytics" class="nav-link-side active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2"/>
+            </svg>
+            Analytics
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main-content">
+
+    <div class="page-header">
+        <h1>Analytics</h1>
+        <p>Performance insights across all your posts</p>
+    </div>
+
+    {% if overview.total_posts == 0 %}
+        <div class="empty-state">
+            <div class="icon">📊</div>
+            <h3>No data yet</h3>
+            <p>Create and publish posts to start seeing analytics.</p>
+            <a href="/drafts/new" class="btn-primary-dark">+ Create your first draft</a>
+        </div>
+    {% else %}
+
+    <!-- Stat cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">Total Posts</div>
+            <div class="value">{{ overview.total_posts }}</div>
+            <div class="sub">{{ overview.total_views }} total views</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="label">Total Engagement</div>
+            <div class="value">{{ "{:,}".format(overview.total_engagement | int) }}</div>
+            <div class="sub">likes + comments + shares</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="label">Avg Engagement Rate</div>
+            <div class="value">{{ overview.avg_engagement }}%</div>
+            <div class="sub">across all platforms</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="label">Best Platform</div>
+            <div class="value" style="font-size:1.4rem;">{{ best_platform }}</div>
+            <div class="sub">highest engagement</div>
+        </div>
+    </div>
+
+    <!-- AI Recommendation -->
+    <div class="ai-rec-card">
+        <div class="ai-rec-header">
+            <span class="ai-rec-badge">🤖 AI Insight</span>
+            <h3>Weekly Recommendation</h3>
+        </div>
+
+        <div class="ai-rec-text" id="recText">
+            {% if recommendation %}
+                {{ recommendation.recommendation_text }}
+            {% else %}
+                Click "Generate" below to get AI-powered recommendations for next week based on your current performance.
+            {% endif %}
+        </div>
+
+        <div class="ai-rec-actions">
+            <button class="btn-rec-generate" id="generateBtn" onclick="generateRecommendation()">
+                ✨ Generate New Recommendation
+            </button>
+            {% if recommendation %}
+            <span class="ai-rec-meta">
+                Last updated {{ (recommendation.created_at | string)[0:10] }}
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+        <div class="chart-panel">
+            <h3>Engagement by Platform</h3>
+            <p class="subtitle">Total likes + comments + shares per platform</p>
+            <div class="chart-container">
+                <canvas id="platformChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-panel">
+            <h3>Posts by Status</h3>
+            <p class="subtitle">Where your posts are in the workflow</p>
+            <div class="chart-container">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top posts -->
+    <div class="top-posts">
+        <h3>Top Performing Posts</h3>
+        <p class="subtitle">Your highest engagement posts ranked</p>
+
+        {% if top_posts %}
+            {% for post in top_posts %}
+            <div class="top-post-row">
+                <div class="rank">#{{ loop.index }}</div>
+                <div class="platform-mini">{{ post.platform }}</div>
+                <div class="post-preview">{{ post.preview }}</div>
+                <div class="metric-cell">
+                    <div class="num">{{ "{:,}".format(post.likes | int) }}</div>
+                    <div class="label">Likes</div>
+                </div>
+                <div class="engagement-badge">{{ post.engagement_rate }}%</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color:#a3a3a3;text-align:center;padding:20px;">
+                No published posts yet. Schedule and publish posts to see them here.
+            </p>
+        {% endif %}
+    </div>
+
+    {% endif %}
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+{% if overview.total_posts > 0 %}
+
+// ─── Platform engagement bar chart ──────────────────────
+const platformData = {{ platform_stats | tojson }};
+const platformCtx  = document.getElementById('platformChart');
+
+new Chart(platformCtx, {
+    type: 'bar',
+    data: {
+        labels: platformData.map(p => p.platform.charAt(0).toUpperCase() + p.platform.slice(1)),
+        datasets: [{
+            label: 'Engagement',
+            data:  platformData.map(p => p.total),
+            backgroundColor: '#0a0a0a',
+            borderRadius: 6,
+            barThickness: 'flex',
+            maxBarThickness: 60,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    afterLabel: function(ctx) {
+                        const p = platformData[ctx.dataIndex];
+                        return `Avg rate: ${p.avg_rate}%`;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: '#f0f0f0' },
+                ticks: { color: '#737373', font: { size: 11 } }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: '#525252', font: { size: 12, weight: '500' } }
+            }
+        }
+    }
+});
+
+// ─── Status donut chart ─────────────────────────────────
+const statusData = {{ status_data | tojson }};
+const statusCtx  = document.getElementById('statusChart');
+
+const statusColors = {
+    'pending_approval': '#fbbf24',
+    'approved':         '#10b981',
+    'rejected':         '#ef4444',
+    'request_edit':     '#f97316',
+    'scheduled':        '#3b82f6',
+    'published':        '#8b5cf6',
+};
+
+new Chart(statusCtx, {
+    type: 'doughnut',
+    data: {
+        labels: statusData.map(s => s.status.replace('_', ' ')),
+        datasets: [{
+            data: statusData.map(s => s.count),
+            backgroundColor: statusData.map(s => statusColors[s.status] || '#a3a3a3'),
+            borderWidth: 0,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: {
+                    color: '#525252',
+                    font: { size: 11 },
+                    padding: 10,
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                }
+            }
+        }
+    }
+});
+{% endif %}
+
+// ─── Generate AI recommendation ─────────────────────────
+async function generateRecommendation() {
+    const btn     = document.getElementById('generateBtn');
+    const textEl  = document.getElementById('recText');
+
+    btn.disabled    = true;
+    btn.textContent = '⏳ Thinking...';
+
+    try {
+        const res = await fetch('/api/analytics/generate-recommendation', {
+            method: 'POST',
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Failed to generate');
+
+        textEl.textContent = data.recommendation_text;
+        showToast('Fresh recommendation generated', 'success');
+
+    } catch (err) {
+        showToast(err.message, 'error');
+    } finally {
+        btn.disabled    = false;
+        btn.textContent = '✨ Generate New Recommendation';
+    }
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+</script>
+
+{% endblock %}
