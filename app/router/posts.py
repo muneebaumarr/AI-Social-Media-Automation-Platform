@@ -34,6 +34,7 @@ def posts_page(request: Request, db: Session = Depends(get_db)):
         "request": request,
         "user":    user,
         "posts":   posts,
+        "now":     datetime.now().strftime("%Y-%m-%dT%H:%M"),
     })
 
 
