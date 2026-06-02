@@ -6,12 +6,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Read with explicit defaults so we never get None
 DB_HOST     = os.getenv("DB_HOST", "localhost")
 DB_PORT     = os.getenv("DB_PORT", "3306")
 DB_USER     = os.getenv("DB_USER", "root")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 DB_NAME     = os.getenv("DB_NAME", "ai_social_media_db")
 
+# Convert to str explicitly — prevents None causing quote_plus to crash
 DB_PASSWORD = str(DB_PASSWORD) if DB_PASSWORD else ""
 DB_USER     = str(DB_USER)     if DB_USER     else "root"
 
@@ -22,8 +24,8 @@ DATABASE_URL = (
 
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,
-    pool_recycle=3600,
+    pool_pre_ping=True,   # auto-reconnect if connection drops
+    pool_recycle=3600,    # recycle connections every hour
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
