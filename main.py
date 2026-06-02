@@ -2,15 +2,22 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from contextlib import asynccontextmanager
 from app.database import test_connection
 from app.router import auth, dashboard, drafts, approvals, posts, analytics, brands
 
 
-# Create FastAPI app
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    test_connection()
+    yield
+
+
 app = FastAPI(
     title="AI Social Media Automation Platform",
     description="Create, repurpose, approve and schedule content with AI",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 # Mount static files
@@ -29,18 +36,11 @@ app.include_router(analytics.router)
 app.include_router(brands.router)
 
 
-# Test database on startup
-@app.on_event("startup")
-async def startup_event():
-    print("Starting AI Social Media Platform...")
-    test_connection()
-
-# Landing page route
 @app.get("/", response_class=HTMLResponse)
 async def landing_page(request: Request):
     return templates.TemplateResponse("landing.html", {"request": request})
 
-# Health check
+
 @app.get("/health")
 def health_check():
     return {"status": "running"}
