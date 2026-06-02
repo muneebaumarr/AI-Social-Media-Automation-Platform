@@ -106,7 +106,12 @@ HUMANIZE_RULES = (
     "- Sound like a smart human, not an AI trying to sound human.\n"
 )
 
-def repurpose_for_platform(draft_title: str, draft_content: str, platform: str) -> dict:
+def repurpose_for_platform(
+    draft_title:   str,
+    draft_content: str,
+    platform:      str,
+    brand_context: dict = None,
+) -> dict:
     """
     Calls Gemini to repurpose draft content for a specific platform.
     Returns a dictionary with repurposed_content, caption, and hashtags.
@@ -121,24 +126,51 @@ def repurpose_for_platform(draft_title: str, draft_content: str, platform: str) 
         f"HASHTAGS: Generate exactly {rule['hashtag_count']} — put them ONLY in the hashtags field, never in the post body.\n"
     )
 
-    prompt = f"""You are a human copywriter and storyteller with 10 years of experience writing viral social media content. \
-You write with personality, clarity, and purpose. You never sound like AI. You never use buzzwords. \
-You write copy that makes real people stop, read, and feel something.
+    # Build the brand context section
+    brand_section = ""
+    if brand_context:
+        parts = []
+        if brand_context.get("brand_name"):
+            parts.append(f"BRAND NAME: {brand_context['brand_name']}")
+        if brand_context.get("industry"):
+            parts.append(f"INDUSTRY: {brand_context['industry']}")
+        if brand_context.get("brand_voice"):
+            parts.append(f"BRAND VOICE & TONE: {brand_context['brand_voice']}")
+        if brand_context.get("target_audience"):
+            parts.append(f"TARGET AUDIENCE: {brand_context['target_audience']}")
+        if brand_context.get("do_not_use"):
+            parts.append(f"AVOID THESE: {brand_context['do_not_use']}")
+        if brand_context.get("social_handle"):
+            parts.append(f"{platform.upper()} HANDLE: {brand_context['social_handle']}")
 
-Your job: repurpose the content below into a native {platform} post.
+        if parts:
+            brand_section = "BRAND CONTEXT:\n" + "\n".join(parts) + "\n\n"
 
----
-ORIGINAL TITLE: {draft_title}
+    prompt = f"""You are a social media expert writing content for a specific brand.
+
+{brand_section}ORIGINAL TITLE: {draft_title}
 ORIGINAL CONTENT: {draft_content}
----
+
+PLATFORM INSTRUCTIONS: {platform_block}
 
 {HUMANIZE_RULES}
 
-{platform_block}
-Return a JSON object with exactly these three fields:
-- repurposed_content: the full post body — NO hashtags inside it, ever.
-- caption: the single hook line only — the very first sentence that stops the scroll.
-- hashtags: space-separated hashtags starting with # — ALL hashtags go here, nowhere else."""
+CRITICAL RULES:
+1. Match the BRAND VOICE exactly — this is more important than anything else
+2. Write FOR the target audience, not at them
+3. Strictly avoid anything in "AVOID THESE"
+4. Output ONLY a JSON object, nothing else
+5. Do NOT use markdown code blocks
+6. Inside JSON strings, escape any double quotes with \\"
+7. The "repurposed_content" must be COMPLETE — do not cut it short
+8. Start your response with {{ and end with }}
+
+Required JSON format:
+{{
+  "repurposed_content": "the COMPLETE post text",
+  "caption": "the hook or short caption",
+  "hashtags": "space-separated hashtags starting with #"
+}}"""
 
     response = None
     try:
@@ -179,8 +211,32 @@ Return a JSON object with exactly these three fields:
         }
 
 
-def repurpose_for_platforms(draft_title: str, draft_content: str, platforms: list) -> list:
-    return [repurpose_for_platform(draft_title, draft_content, p) for p in platforms]
+def repurpose_for_platforms(
+    draft_title:    str,
+    draft_content:  str,
+    platforms:      list,
+    brand_context:  dict = None,
+    social_handles: dict = None,
+) -> list:
+    """
+    Generates content for multiple platforms with brand context.
+
+    social_handles is a dict like {'instagram': '@acmecoffee', 'linkedin': ...}
+    """
+    results = []
+    for platform in platforms:
+        ctx = dict(brand_context) if brand_context else {}
+        if social_handles and platform in social_handles:
+            ctx["social_handle"] = social_handles[platform]
+
+        result = repurpose_for_platform(
+            draft_title   = draft_title,
+            draft_content = draft_content,
+            platform      = platform,
+            brand_context = ctx if ctx else None,
+        )
+        results.append(result)
+    return results
 
 
 def generate_weekly_recommendation(platform_stats: list[dict],
