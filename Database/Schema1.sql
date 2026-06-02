@@ -280,6 +280,12 @@ CREATE INDEX idx_audit_user_id    ON audit_logs (user_id);
 CREATE INDEX idx_audit_entity     ON audit_logs (entity_name, entity_id);
 CREATE INDEX idx_audit_created_at ON audit_logs (created_at);
 
+select * from analytics_logs;
+
+
+SELECT user_id, full_name, email, role FROM users 
+WHERE email = 'test@example.com';
+
 -- ─── 1. Add brand identity columns to clients ──────────
 ALTER TABLE clients
     ADD COLUMN owner_id        CHAR(36)     NULL AFTER client_id,
@@ -324,3 +330,5 @@ CREATE INDEX idx_cm_user   ON client_members (user_id);
 -- ─── 3. Verify ────────────────────────────────────────
 DESCRIBE clients;
 DESCRIBE client_members;
+
+SHOW COLUMNS FROM clients;

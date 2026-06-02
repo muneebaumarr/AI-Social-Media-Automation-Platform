@@ -271,6 +271,17 @@
         </div>
     </div>
 
+    <nav style="display:flex; gap:4px; border-bottom: 1px solid #f0f0f0; margin-bottom: 28px;">
+        <a href="/brands/{{ brand.client_id }}"
+           style="padding:10px 16px; color:#0a0a0a; text-decoration:none; font-size:0.9rem; font-weight:500; border-bottom:2px solid #0a0a0a;">
+            Brand Identity
+        </a>
+        <a href="/brands/{{ brand.client_id }}/accounts"
+           style="padding:10px 16px; color:#737373; text-decoration:none; font-size:0.9rem; font-weight:500; border-bottom:2px solid transparent;">
+            Social Accounts
+        </a>
+    </nav>
+
     {% if can_edit %}
     <div class="invite-code-box">
         <div class="invite-code-text">

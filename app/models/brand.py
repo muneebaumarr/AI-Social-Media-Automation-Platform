@@ -190,3 +190,37 @@ def get_brand_members(db: Session, client_id: str):
         ORDER  BY cm.added_at DESC
     """)
     return db.execute(query, {"cid": client_id}).mappings().all()
+
+
+def get_brand_context_for_ai(db: Session, client_id: str) -> dict:
+    """
+    Returns brand context formatted for the AI prompt.
+    Includes brand identity + connected social handles.
+    """
+    brand = db.execute(text("""
+        SELECT client_name, industry, brand_voice,
+               target_audience, do_not_use
+        FROM   clients WHERE client_id = :cid
+    """), {"cid": client_id}).mappings().first()
+
+    if not brand:
+        return None
+
+    handles = db.execute(text("""
+        SELECT platform, account_name
+        FROM   social_accounts
+        WHERE  client_id = :cid AND connected_status = 1
+    """), {"cid": client_id}).mappings().all()
+
+    social_handles = {h["platform"]: h["account_name"] for h in handles}
+
+    return {
+        "brand_context": {
+            "brand_name":      brand["client_name"],
+            "industry":        brand["industry"],
+            "brand_voice":     brand["brand_voice"],
+            "target_audience": brand["target_audience"],
+            "do_not_use":      brand["do_not_use"],
+        },
+        "social_handles": social_handles,
+    }

@@ -1,0 +1,520 @@
+{% extends "base.html" %}
+
+{% block title %}{{ brand.client_name }} — Social Accounts{% endblock %}
+
+{% block extra_head %}
+<style>
+    body { background: #fafafa; color: #0a0a0a; font-family: 'Inter', -apple-system, sans-serif; }
+
+    /* Sidebar */
+    .sidebar { width: 240px; height: 100vh; background: #0a0a0a; color: #ffffff; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; z-index: 50; }
+    .sidebar-brand { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); font-weight: 700; font-size: 1.05rem; }
+    .sidebar-brand .dot { display: inline-block; width: 8px; height: 8px; background: #ffffff; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; }
+    .nav-link-side { display: flex; align-items: center; gap: 12px; padding: 10px 14px; color: #a3a3a3; text-decoration: none; font-size: 0.92rem; font-weight: 500; border-radius: 8px; margin-bottom: 2px; }
+    .nav-link-side:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .nav-link-side.active { background: rgba(255,255,255,0.12); color: #ffffff; }
+    .nav-link-side svg { width: 18px; height: 18px; }
+    .sidebar-user { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .user-avatar { width: 36px; height: 36px; background: #ffffff; color: #0a0a0a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .user-name { font-size: 0.88rem; color: #ffffff; }
+    .user-role { font-size: 0.75rem; color: #a3a3a3; text-transform: capitalize; }
+    .sidebar-user a { display: block; color: #737373; font-size: 0.78rem; text-decoration: none; padding: 6px 0; }
+
+    /* Main */
+    .main-content {
+        margin-left: 240px;
+        padding: 32px 40px;
+        max-width: 1000px;
+    }
+
+    /* Brand header */
+    .brand-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .brand-avatar-medium {
+        width: 48px; height: 48px;
+        border-radius: 12px;
+        background: #0a0a0a;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .brand-header h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 2px 0;
+    }
+
+    .brand-header .meta {
+        color: #737373;
+        font-size: 0.88rem;
+    }
+
+    /* Sub navigation tabs */
+    .sub-nav {
+        display: flex;
+        gap: 4px;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 28px;
+    }
+
+    .sub-nav a {
+        padding: 10px 16px;
+        color: #737373;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
+        transition: all 0.15s;
+    }
+
+    .sub-nav a:hover { color: #0a0a0a; }
+
+    .sub-nav a.active {
+        color: #0a0a0a;
+        border-bottom-color: #0a0a0a;
+    }
+
+    /* Demo mode banner */
+    .demo-banner {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 1px solid #fcd34d;
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 24px;
+        font-size: 0.88rem;
+        color: #78350f;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .demo-banner .icon { font-size: 1.1rem; }
+
+    .demo-banner strong { font-weight: 600; }
+
+    /* Platform grid */
+    .platforms-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 14px;
+    }
+
+    .platform-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 14px;
+        padding: 20px;
+        transition: all 0.2s;
+    }
+
+    .platform-card.connected {
+        border-color: #d1fae5;
+        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .platform-card:hover {
+        border-color: #d4d4d4;
+        transform: translateY(-2px);
+    }
+
+    .platform-card.connected:hover { border-color: #86efac; }
+
+    .platform-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .platform-icon {
+        width: 40px; height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+    }
+
+    .platform-icon svg { width: 22px; height: 22px; }
+
+    .platform-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #0a0a0a;
+        margin: 0;
+    }
+
+    .platform-status {
+        font-size: 0.78rem;
+        color: #737373;
+        margin: 0;
+    }
+
+    .platform-status.connected {
+        color: #10b981;
+        font-weight: 500;
+    }
+
+    .platform-handle {
+        font-size: 0.88rem;
+        color: #0a0a0a;
+        font-weight: 500;
+        margin-top: 4px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    .btn-connect {
+        width: 100%;
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 9px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+    .btn-connect:hover { background: #2a2a2a; }
+
+    .btn-disconnect {
+        width: 100%;
+        background: transparent;
+        color: #ef4444;
+        border: 1px solid #fecaca;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+    .btn-disconnect:hover { background: #fef2f2; }
+
+    .btn-disabled-info {
+        width: 100%;
+        background: #f5f5f5;
+        color: #a3a3a3;
+        padding: 9px 16px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        text-align: center;
+    }
+
+    /* Connect modal */
+    .modal-backdrop {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        backdrop-filter: blur(4px);
+    }
+
+    .modal-backdrop.active { display: flex; }
+
+    .modal {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 28px;
+        max-width: 420px;
+        width: 92%;
+    }
+
+    .modal-icon {
+        width: 56px; height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        margin-bottom: 16px;
+    }
+
+    .modal-icon svg { width: 28px; height: 28px; }
+
+    .modal h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px 0;
+    }
+
+    .modal p {
+        color: #737373;
+        font-size: 0.9rem;
+        margin: 0 0 20px 0;
+    }
+
+    .modal-input {
+        width: 100%;
+        background: #fafafa;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        color: #0a0a0a;
+        font-family: inherit;
+        margin-bottom: 16px;
+    }
+
+    .modal-input:focus {
+        outline: none;
+        border-color: #0a0a0a;
+        background: #ffffff;
+    }
+
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-actions button {
+        flex: 1;
+        padding: 11px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+    }
+
+    .modal-cancel {
+        background: transparent;
+        color: #525252;
+        border: 1px solid #e5e5e5 !important;
+    }
+
+    .modal-confirm {
+        background: #0a0a0a;
+        color: #ffffff;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 24px; right: 24px;
+        background: #0a0a0a; color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        opacity: 0; transform: translateY(20px);
+        transition: all 0.3s ease;
+        z-index: 300;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #10b981; }
+    .toast.error   { background: #ef4444; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span>SocialAI</div>
+    <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-link-side">Dashboard</a>
+        <a href="/brands" class="nav-link-side active">Brands</a>
+        <a href="/drafts" class="nav-link-side">Drafts</a>
+        <a href="/posts" class="nav-link-side">Posts</a>
+        {% if user.role in ['manager', 'admin'] %}
+        <a href="/manager" class="nav-link-side">Review Queue</a>
+        {% endif %}
+        <a href="/analytics" class="nav-link-side">Analytics</a>
+    </nav>
+    <div class="sidebar-user">
+        <div class="user-info">
+            <div class="user-avatar">{{ user.name[0]|upper }}</div>
+            <div>
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-role">{{ user.role }}</div>
+            </div>
+        </div>
+        <a href="/auth/logout">⬅ Sign out</a>
+    </div>
+</aside>
+
+<main class="main-content">
+
+    <!-- Brand header -->
+    <div class="brand-header">
+        <div class="brand-avatar-medium" id="brandAvatar" data-color="{{ brand.brand_color or '#0a0a0a' }}">{{ brand.client_name[0]|upper }}</div>
+        <div>
+            <h1>{{ brand.client_name }}</h1>
+            <div class="meta">{{ brand.industry or 'No industry set' }}</div>
+        </div>
+    </div>
+
+    <!-- Sub navigation -->
+    <nav class="sub-nav">
+        <a href="/brands/{{ brand.client_id }}">Brand Identity</a>
+        <a href="/brands/{{ brand.client_id }}/accounts" class="active">Social Accounts</a>
+    </nav>
+
+    <!-- Platform grid -->
+    <div class="platforms-grid">
+        {% for platform in platforms %}
+        {% set is_connected = platform.key in connected_map %}
+        <div class="platform-card {% if is_connected %}connected{% endif %}">
+            <div class="platform-header">
+                <div class="platform-icon" data-color="{{ platform.color }}">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path d="{{ platform.icon }}"/>
+                    </svg>
+                </div>
+                <div style="flex:1;">
+                    <h3 class="platform-name">{{ platform.name }}</h3>
+                    {% if is_connected %}
+                        <p class="platform-status connected">● Connected</p>
+                        <p class="platform-handle">{{ connected_map[platform.key].account_name }}</p>
+                    {% else %}
+                        <p class="platform-status">Not connected</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if can_edit %}
+                {% if is_connected %}
+                    <button class="btn-disconnect"
+                            onclick="disconnectPlatform('{{ platform.key }}', '{{ platform.name }}')">
+                        Disconnect
+                    </button>
+                {% else %}
+                    <button class="btn-connect"
+                            onclick="openConnectModal('{{ platform.key }}', '{{ platform.name }}', '{{ platform.color }}', '{{ platform.icon }}')">
+                        Connect {{ platform.name }}
+                    </button>
+                {% endif %}
+            {% else %}
+                <div class="btn-disabled-info">
+                    Only owner can manage accounts
+                </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+</main>
+
+<!-- ═══ CONNECT MODAL ═══ -->
+<div class="modal-backdrop" id="connectModal">
+    <div class="modal">
+        <div class="modal-icon" id="modalIcon">
+            <svg fill="currentColor" viewBox="0 0 24 24">
+                <path id="modalIconPath" d=""/>
+            </svg>
+        </div>
+        <h3>Connect <span id="modalPlatform"></span></h3>
+        <p>Demo mode — enter the handle you want to associate with this brand.</p>
+
+        <input type="text" id="handleInput" class="modal-input"
+               placeholder="@yourhandle" maxlength="80">
+
+        <div class="modal-actions">
+            <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+            <button class="modal-confirm" onclick="confirmConnect()">Connect</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script id="account-data" type="application/json">
+{ "clientId": {{ brand.client_id | tojson }}, "color": {{ (brand.brand_color or '#0a0a0a') | tojson }} }
+</script>
+<script>
+(function () {
+    var d = JSON.parse(document.getElementById('account-data').textContent);
+
+    // Apply brand color to avatar
+    var avatar = document.getElementById('brandAvatar');
+    if (avatar) avatar.style.background = d.color;
+
+    // Apply each platform icon color
+    document.querySelectorAll('.platform-icon[data-color]').forEach(function (el) {
+        el.style.background = el.dataset.color;
+    });
+
+    var activePlatform = null;
+
+    window.openConnectModal = function (key, name, color, iconPath) {
+        activePlatform = key;
+        document.getElementById('modalPlatform').textContent = name;
+        document.getElementById('modalIcon').style.background = color;
+        document.getElementById('modalIconPath').setAttribute('d', iconPath);
+        document.getElementById('handleInput').value = '';
+        document.getElementById('connectModal').classList.add('active');
+        document.getElementById('handleInput').focus();
+    };
+
+    window.closeModal = function () {
+        document.getElementById('connectModal').classList.remove('active');
+        activePlatform = null;
+    };
+
+    window.confirmConnect = function () {
+        var handle = document.getElementById('handleInput').value.trim();
+        if (!handle) { showToast('Please enter a handle', 'error'); return; }
+
+        var formData = new FormData();
+        formData.append('platform', activePlatform);
+        formData.append('account_name', handle);
+
+        fetch('/api/brands/' + d.clientId + '/accounts/connect', { method: 'POST', body: formData })
+            .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+            .then(function (r) {
+                if (!r.ok) throw new Error(r.data.detail || 'Connection failed');
+                showToast(r.data.message, 'success');
+                window.closeModal();
+                setTimeout(function () { location.reload(); }, 800);
+            })
+            .catch(function (err) { showToast(err.message, 'error'); });
+    };
+
+    window.disconnectPlatform = function (key, name) {
+        if (!confirm('Disconnect ' + name + ' from this brand?')) return;
+
+        var formData = new FormData();
+        formData.append('platform', key);
+
+        fetch('/api/brands/' + d.clientId + '/accounts/disconnect', { method: 'POST', body: formData })
+            .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+            .then(function (r) {
+                if (!r.ok) throw new Error(r.data.detail || 'Disconnect failed');
+                showToast(r.data.message, 'success');
+                setTimeout(function () { location.reload(); }, 800);
+            })
+            .catch(function (err) { showToast(err.message, 'error'); });
+    };
+
+    document.getElementById('handleInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') window.confirmConnect();
+    });
+
+    document.getElementById('connectModal').addEventListener('click', function (e) {
+        if (e.target.id === 'connectModal') window.closeModal();
+    });
+
+    function showToast(message, type) {
+        var toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast show ' + (type || 'success');
+        setTimeout(function () { toast.classList.remove('show'); }, 3000);
+    }
+})();
+</script>
+{% endblock %}

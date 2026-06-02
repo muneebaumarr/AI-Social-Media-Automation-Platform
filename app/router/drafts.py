@@ -128,11 +128,17 @@ def repurpose_draft_api(
     if draft["created_by"] != user["user_id"]:
         raise HTTPException(status_code=403, detail="Not your draft")
 
-    # ─── Call Gemini AI ────────────────────────────────────
+    # ─── Load brand context for AI personalization ──────
+    from app.models.brand import get_brand_context_for_ai
+    brand_data = get_brand_context_for_ai(db, draft["client_id"])
+
+    # ─── Call Gemini AI with brand context ─────────────
     results = repurpose_for_platforms(
-        draft_title   = draft["draft_title"],
-        draft_content = draft["draft_content"],
-        platforms     = platform_list,
+        draft_title    = draft["draft_title"],
+        draft_content  = draft["draft_content"],
+        platforms      = platform_list,
+        brand_context  = brand_data["brand_context"] if brand_data else None,
+        social_handles = brand_data["social_handles"] if brand_data else None,
     )
 
     # ─── Save each generated post to DB ─────────────────────
