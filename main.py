@@ -8,8 +8,12 @@ from app.router import auth, dashboard, drafts, approvals, posts, analytics, bra
 
 
 @asynccontextmanager
-async def lifespan(_app: FastAPI):
-    test_connection()
+async def lifespan(app: FastAPI):
+    try:
+        test_connection()
+        print("DB connected")
+    except Exception as e:
+        print("DB connection failed:", e)
     yield
 
 
@@ -21,7 +25,16 @@ app = FastAPI(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+#app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app.mount(
+    "/static",
+    StaticFiles(directory=os.path.join(BASE_DIR, "static")),
+    name="static"
+)
 
 # Setup templates
 templates = Jinja2Templates(directory="app/templates")
